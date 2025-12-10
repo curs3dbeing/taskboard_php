@@ -14,7 +14,7 @@ define('SMTP_FROM_EMAIL', 'courseprojauth@mail.ru');
 define('SMTP_FROM_NAME', 'Task Planner');
 
 
-define('SITE_URL', 'http://localhost:8000');
+define('SITE_URL', 'https://taskboardphp-production.up.railway.app/');
 define('SESSION_LIFETIME', 3600);
 
 
