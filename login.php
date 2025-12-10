@@ -12,8 +12,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         try {
             $pdo = getDBConnection();
-
-            $isEmail = isValidEmail($username);
+            if (!$pdo) {
+                $error = 'Ошибка подключения к базе данных. Попробуйте позже.';
+            } else {
+                $isEmail = isValidEmail($username);
             $field = $isEmail ? 'email' : 'username';
             
             $stmt = $pdo->prepare("SELECT id, username, password_hash FROM users WHERE $field = ?");
@@ -28,8 +30,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             } else {
                 $error = 'Неверный логин/почта или пароль.';
             }
+            }
         } catch (PDOException $e) {
             $error = 'При авторизации произошла ошибка. Попробуйте еще раз.';
+        } catch (Exception $e) {
+            $error = 'Ошибка подключения к базе данных. Попробуйте позже.';
         }
     }
 }

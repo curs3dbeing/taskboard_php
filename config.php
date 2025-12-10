@@ -1,6 +1,5 @@
 <?php
 
-// Database configuration - использует переменные окружения или значения по умолчанию
 define('DB_HOST', getenv('DB_HOST') ?: getenv('MYSQLHOST') ?: 'mysql.railway.internal');
 define('DB_NAME', getenv('DB_NAME') ?: getenv('MYSQLDATABASE') ?: 'railway');
 define('DB_USER', getenv('DB_USER') ?: getenv('MYSQLUSER') ?: 'root');
@@ -15,7 +14,6 @@ define('SMTP_FROM_EMAIL', 'courseprojauth@mail.ru');
 define('SMTP_FROM_NAME', 'Task Planner');
 
 
-// Site URL - использует переменную окружения или значение по умолчанию
 define('SITE_URL', getenv('SITE_URL') ?: getenv('RAILWAY_PUBLIC_DOMAIN') ?: 'https://taskboardphp-production.up.railway.app');
 define('SESSION_LIFETIME', 3600);
 
@@ -25,6 +23,13 @@ define('MIN_USERNAME_LENGTH', 3);
 define('MAX_USERNAME_LENGTH', 50);
 
 function getDBConnection() {
+    static $pdo = null;
+    
+    // Используем статическую переменную для переиспользования соединения
+    if ($pdo !== null) {
+        return $pdo;
+    }
+    
     try {
         $pdo = new PDO(
             "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=utf8mb4",
@@ -39,13 +44,12 @@ function getDBConnection() {
         );
         return $pdo;
     } catch (PDOException $e) {
-        // В production не показываем детали ошибки
         error_log("Database connection failed: " . $e->getMessage());
+        // Не используем die() - возвращаем null, чтобы вызывающий код мог обработать ошибку
         if (php_sapi_name() === 'cli' || isset($_GET['debug'])) {
-            die("Database connection failed: " . $e->getMessage());
-        } else {
-            die("Database connection failed. Please check the configuration.");
+            throw new Exception("Database connection failed: " . $e->getMessage());
         }
+        return null;
     }
 }
 

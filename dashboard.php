@@ -3,6 +3,10 @@ require_once 'config.php';
 requireLogin();
 
 $pdo = getDBConnection();
+if (!$pdo) {
+    die("Database connection failed. Please check the configuration.");
+}
+
 $user_id = getCurrentUserId();
 
 // Получаем активные задачи (не выполненные) с сортировкой по приоритету и дате создания
