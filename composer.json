@@ -1,0 +1,8 @@
+{
+    "name": "task-planner/app",
+    "description": "Task Planner Application",
+    "require": {
+        "phpmailer/phpmailer": "^6.9"
+    }
+}
+

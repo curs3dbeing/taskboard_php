@@ -1,0 +1,83 @@
+<?php
+require_once 'config.php';
+
+$error = '';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $username = trim($_POST['username'] ?? '');
+    $password = $_POST['password'] ?? '';
+    
+    if (empty($username) || empty($password)) {
+        $error = 'Пожалуйста введите логин и пароль.';
+    } else {
+        try {
+            $pdo = getDBConnection();
+
+            $isEmail = isValidEmail($username);
+            $field = $isEmail ? 'email' : 'username';
+            
+            $stmt = $pdo->prepare("SELECT id, username, password_hash FROM users WHERE $field = ?");
+            $stmt->execute([$username]);
+            $user = $stmt->fetch();
+            
+            if ($user && password_verify($password, $user['password_hash'])) {
+                $_SESSION['user_id'] = $user['id'];
+                $_SESSION['username'] = $user['username'];
+                header('Location: dashboard.php');
+                exit;
+            } else {
+                $error = 'Неверный логин/почта или пароль.';
+            }
+        } catch (PDOException $e) {
+            $error = 'При авторизации произошла ошибка. Попробуйте еще раз.';
+        }
+    }
+}
+
+if (isLoggedIn()) {
+    header('Location: dashboard.php');
+    exit;
+}
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Авторизация</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="auth-card">
+            <h1>Авторизация</h1>
+            
+            <?php if ($error): ?>
+                <div class="alert alert-error"><?php echo htmlspecialchars($error); ?></div>
+            <?php endif; ?>
+            
+            <form method="POST" action="login.php" id="loginForm">
+                <div class="form-group">
+                    <label for="username">Логин или почта</label>
+                    <input type="text" id="username" name="username" required 
+                           value="<?php echo htmlspecialchars($username ?? ''); ?>">
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Пароль</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">Авторизоваться</button>
+            </form>
+            
+            <div class="auth-links">
+                <p><a href="forgot_password.php">Забыли пароль?</a></p>
+                <p>Нет аккаунта? <a href="register.php">Зарегистрируйтесь!</a></p>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
+
