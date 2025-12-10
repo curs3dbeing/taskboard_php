@@ -14,12 +14,12 @@ $stmt = $pdo->prepare("SELECT * FROM tasks WHERE user_id = ? AND completed = 0 O
 $stmt->execute([$user_id]);
 $tasks = $stmt->fetchAll();
 
-// Получаем выполненные задачи
+
 $stmt = $pdo->prepare("SELECT * FROM tasks WHERE user_id = ? AND completed = 1 ORDER BY updated_at DESC");
 $stmt->execute([$user_id]);
 $completedTasks = $stmt->fetchAll();
 
-// Функция для получения названия приоритета
+
 function getPriorityName($priority) {
     switch($priority) {
         case 1: return 'Критическая';
@@ -29,7 +29,7 @@ function getPriorityName($priority) {
     }
 }
 
-// Функция для получения класса приоритета
+
 function getPriorityClass($priority) {
     switch($priority) {
         case 1: return 'priority-critical';

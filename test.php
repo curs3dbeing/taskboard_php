@@ -76,3 +76,4 @@ echo "<h2>8. Final Status</h2>";
 echo "<p style='color: green; font-weight: bold;'>Если все проверки пройдены, приложение должно работать.</p>";
 echo "<p>Если есть ошибки, проверьте логи в Railway Dashboard.</p>";
 
+

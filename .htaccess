@@ -21,3 +21,4 @@ RewriteRule ^(.*)$ index.php [QSA,L]
     php_value max_input_time 300
 </IfModule>
 
+

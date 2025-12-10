@@ -28,21 +28,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $stmt = $pdo->prepare("UPDATE users SET password_reset_token = ?, password_reset_expires = ? WHERE email = ?");
                     $stmt->execute([$token, $expires, $email]);
 
-                    // Увеличиваем время выполнения для отправки email
+
                     set_time_limit(60);
                     
-                    // Пытаемся отправить email, но не блокируем процесс
+
                     $emailSent = @sendPasswordResetEmail($email, $token);
                     
-                    // Всегда показываем успех для безопасности (не раскрываем, существует ли email)
+
                     $success = 'Если эта почта существует, ссылка для сброса пароля была отправлена на вашу почту.';
                     
-                    // Логируем результат для отладки
+
                     if (!$emailSent) {
                         error_log("Failed to send password reset email to: $email");
                     }
                 } else {
-                    // Для безопасности показываем то же сообщение
+
                     $success = 'Если эта почта существует, ссылка для сброса пароля была отправлена на вашу почту.';
                 }
             }

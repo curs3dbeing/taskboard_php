@@ -1,20 +1,20 @@
 <?php
 
-define('DB_HOST', getenv('DB_HOST') ?: getenv('MYSQLHOST') ?: 'mysql.railway.internal');
+define('DB_HOST', getenv('DB_HOST') ?: getenv('MYSQLHOST') ?: 'mysql.railway.internal'); #
 define('DB_NAME', getenv('DB_NAME') ?: getenv('MYSQLDATABASE') ?: 'railway');
 define('DB_USER', getenv('DB_USER') ?: getenv('MYSQLUSER') ?: 'root');
 define('DB_PASS', getenv('DB_PASS') ?: getenv('MYSQLPASSWORD') ?: 'CaDCLkuDVllroHlKErMTxTqCadraZMtp');
 
 
-define('SMTP_HOST', 'smtp.mail.ru');
+define('SMTP_HOST', 'smtp.gmail.com');
 define('SMTP_PORT', 587);
-define('SMTP_USER', 'courseprojauth@mail.ru');
-define('SMTP_PASS', 'kx3qsm5rxBDqmwgwLmuv');
-define('SMTP_FROM_EMAIL', 'courseprojauth@mail.ru');
+define('SMTP_USER', getenv('SMTP_USER_GM'));
+define('SMTP_PASS', getenv('SMTP_PASS_GM'));
+define('SMTP_FROM_EMAIL', getenv('SMTP_USER_GM'));
 define('SMTP_FROM_NAME', 'Task Planner');
 
 
-define('SITE_URL', getenv('SITE_URL') ?: getenv('RAILWAY_PUBLIC_DOMAIN') ?: 'https://taskboardphp-production.up.railway.app');
+define('SITE_URL', getenv('SITE_URL') ?: getenv('RAILWAY_PUBLIC_DOMAIN') ?: 'https://taskboardphp-production.up.railway.app'); #https://taskboardphp-production.up.railway.app
 define('SESSION_LIFETIME', 3600);
 
 
