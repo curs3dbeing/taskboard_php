@@ -1,0 +1,32 @@
+# PHP
+*.log
+*.cache
+.htpasswd
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+.env.local
+
+# Temporary files
+init_db.php
+*.tmp
+
+# Composer
+/vendor/
+composer.lock
+
+# Node (if using)
+node_modules/
+npm-debug.log
+
