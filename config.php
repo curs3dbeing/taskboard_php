@@ -25,7 +25,6 @@ define('MAX_USERNAME_LENGTH', 50);
 function getDBConnection() {
     static $pdo = null;
     
-    // Используем статическую переменную для переиспользования соединения
     if ($pdo !== null) {
         return $pdo;
     }
@@ -45,7 +44,7 @@ function getDBConnection() {
         return $pdo;
     } catch (PDOException $e) {
         error_log("Database connection failed: " . $e->getMessage());
-        // Не используем die() - возвращаем null, чтобы вызывающий код мог обработать ошибку
+
         if (php_sapi_name() === 'cli' || isset($_GET['debug'])) {
             throw new Exception("Database connection failed: " . $e->getMessage());
         }
@@ -95,31 +94,37 @@ function sendPasswordResetEmail($email, $token) {
 }
 
 function sendEmailWithSMTP($to, $subject, $message) {
+    $smtp = null;
     try {
-        // Determine if we need SSL (port 465) or STARTTLS (port 587)
+        $connectionTimeout = 10;
+        $readTimeout = 5;
+        
+
         $useSSL = (SMTP_PORT == 465);
         $context = null;
         
         if ($useSSL) {
-            // SSL connection for port 465
             $context = stream_context_create([
                 'ssl' => [
                     'verify_peer' => false,
                     'verify_peer_name' => false,
                     'allow_self_signed' => true
+                ],
+                'socket' => [
+                    'tcp_nodelay' => true
                 ]
             ]);
-            $smtp = stream_socket_client(
+            $smtp = @stream_socket_client(
                 "ssl://" . SMTP_HOST . ":" . SMTP_PORT,
                 $errno,
                 $errstr,
-                30,
+                $connectionTimeout,
                 STREAM_CLIENT_CONNECT,
                 $context
             );
         } else {
-            // Regular connection for STARTTLS (port 587)
-            $smtp = fsockopen(SMTP_HOST, SMTP_PORT, $errno, $errstr, 30);
+
+            $smtp = @fsockopen(SMTP_HOST, SMTP_PORT, $errno, $errstr, $connectionTimeout);
         }
         
         if (!$smtp) {
@@ -127,57 +132,109 @@ function sendEmailWithSMTP($to, $subject, $message) {
             return false;
         }
         
-        // Read server greeting
-        fgets($smtp, 515);
+
+        stream_set_timeout($smtp, $readTimeout);
         
-        // Send EHLO
-        fputs($smtp, "EHLO " . SMTP_HOST . "\r\n");
-        fgets($smtp, 515);
-        
-        // Start TLS if not using SSL
-        if (!$useSSL) {
-            fputs($smtp, "STARTTLS\r\n");
-            $response = fgets($smtp, 515);
-            
-            if (strpos($response, "220") !== false) {
-                // Enable crypto
-                if (!stream_socket_enable_crypto($smtp, true, STREAM_CRYPTO_METHOD_TLS_CLIENT)) {
-                    error_log("Failed to enable TLS");
-                    fclose($smtp);
-                    return false;
-                }
-                
-                // Send EHLO again after TLS
-                fputs($smtp, "EHLO " . SMTP_HOST . "\r\n");
-                fgets($smtp, 515);
-            }
-        }
-        
-        // Authenticate
-        fputs($smtp, "AUTH LOGIN\r\n");
-        fgets($smtp, 515);
-        
-        fputs($smtp, base64_encode(SMTP_USER) . "\r\n");
-        fgets($smtp, 515);
-        
-        fputs($smtp, base64_encode(SMTP_PASS) . "\r\n");
-        $authResponse = fgets($smtp, 515);
-        
-        if (strpos($authResponse, "235") === false) {
-            error_log("SMTP Authentication failed: " . trim($authResponse));
+
+        $greeting = @fgets($smtp, 515);
+        if ($greeting === false) {
+            error_log("SMTP: Failed to read greeting");
             fclose($smtp);
             return false;
         }
         
-        // Send email
-        fputs($smtp, "MAIL FROM: <" . SMTP_FROM_EMAIL . ">\r\n");
-        fgets($smtp, 515);
+
+        if (@fputs($smtp, "EHLO " . SMTP_HOST . "\r\n") === false) {
+            error_log("SMTP: Failed to send EHLO");
+            fclose($smtp);
+            return false;
+        }
+        $ehloResponse = @fgets($smtp, 515);
+        if ($ehloResponse === false) {
+            error_log("SMTP: Failed to read EHLO response");
+            fclose($smtp);
+            return false;
+        }
         
-        fputs($smtp, "RCPT TO: <" . $to . ">\r\n");
-        fgets($smtp, 515);
+
+        if (!$useSSL) {
+            if (@fputs($smtp, "STARTTLS\r\n") === false) {
+                error_log("SMTP: Failed to send STARTTLS");
+                fclose($smtp);
+                return false;
+            }
+            $response = @fgets($smtp, 515);
+            if ($response === false || strpos($response, "220") === false) {
+                error_log("SMTP: STARTTLS failed or not supported");
+                fclose($smtp);
+                return false;
+            }
+            
+
+            if (!@stream_socket_enable_crypto($smtp, true, STREAM_CRYPTO_METHOD_TLS_CLIENT)) {
+                error_log("SMTP: Failed to enable TLS");
+                fclose($smtp);
+                return false;
+            }
+            
+
+            if (@fputs($smtp, "EHLO " . SMTP_HOST . "\r\n") === false) {
+                error_log("SMTP: Failed to send EHLO after TLS");
+                fclose($smtp);
+                return false;
+            }
+            @fgets($smtp, 515);
+        }
         
-        fputs($smtp, "DATA\r\n");
-        fgets($smtp, 515);
+
+        if (@fputs($smtp, "AUTH LOGIN\r\n") === false) {
+            error_log("SMTP: Failed to send AUTH LOGIN");
+            fclose($smtp);
+            return false;
+        }
+        @fgets($smtp, 515);
+        
+        if (@fputs($smtp, base64_encode(SMTP_USER) . "\r\n") === false) {
+            error_log("SMTP: Failed to send username");
+            fclose($smtp);
+            return false;
+        }
+        @fgets($smtp, 515);
+        
+        if (@fputs($smtp, base64_encode(SMTP_PASS) . "\r\n") === false) {
+            error_log("SMTP: Failed to send password");
+            fclose($smtp);
+            return false;
+        }
+        $authResponse = @fgets($smtp, 515);
+        
+        if ($authResponse === false || strpos($authResponse, "235") === false) {
+            error_log("SMTP Authentication failed: " . trim($authResponse ?: 'No response'));
+            fclose($smtp);
+            return false;
+        }
+        
+
+        if (@fputs($smtp, "MAIL FROM: <" . SMTP_FROM_EMAIL . ">\r\n") === false) {
+            error_log("SMTP: Failed to send MAIL FROM");
+            fclose($smtp);
+            return false;
+        }
+        @fgets($smtp, 515);
+        
+        if (@fputs($smtp, "RCPT TO: <" . $to . ">\r\n") === false) {
+            error_log("SMTP: Failed to send RCPT TO");
+            fclose($smtp);
+            return false;
+        }
+        @fgets($smtp, 515);
+        
+        if (@fputs($smtp, "DATA\r\n") === false) {
+            error_log("SMTP: Failed to send DATA");
+            fclose($smtp);
+            return false;
+        }
+        @fgets($smtp, 515);
         
         $headers = "From: " . SMTP_FROM_NAME . " <" . SMTP_FROM_EMAIL . ">\r\n";
         $headers .= "To: <" . $to . ">\r\n";
@@ -185,15 +242,22 @@ function sendEmailWithSMTP($to, $subject, $message) {
         $headers .= "Content-Type: text/plain; charset=UTF-8\r\n";
         $headers .= "\r\n";
         
-        fputs($smtp, $headers . $message . "\r\n.\r\n");
-        fgets($smtp, 515);
+        if (@fputs($smtp, $headers . $message . "\r\n.\r\n") === false) {
+            error_log("SMTP: Failed to send email data");
+            fclose($smtp);
+            return false;
+        }
+        @fgets($smtp, 515);
         
-        fputs($smtp, "QUIT\r\n");
+        @fputs($smtp, "QUIT\r\n");
         fclose($smtp);
         
         return true;
     } catch (Exception $e) {
         error_log("SMTP Error: " . $e->getMessage());
+        if (isset($smtp) && $smtp) {
+            @fclose($smtp);
+        }
         return false;
     }
 }
@@ -206,7 +270,7 @@ function sendEmailWithPHPMailer($to, $subject, $message) {
     $mail = new PHPMailer\PHPMailer\PHPMailer(true);
     
     try {
-        // Server settings
+
         $mail->isSMTP();
         $mail->Host = SMTP_HOST;
         $mail->SMTPAuth = true;
@@ -216,11 +280,11 @@ function sendEmailWithPHPMailer($to, $subject, $message) {
         $mail->Port = SMTP_PORT;
         $mail->CharSet = 'UTF-8';
         
-        // Recipients
+
         $mail->setFrom(SMTP_FROM_EMAIL, SMTP_FROM_NAME);
         $mail->addAddress($to);
         
-        // Content
+
         $mail->isHTML(false);
         $mail->Subject = $subject;
         $mail->Body = $message;

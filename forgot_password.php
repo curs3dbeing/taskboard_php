@@ -14,27 +14,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         try {
             $pdo = getDBConnection();
-            
-            $stmt = $pdo->prepare("SELECT id FROM users WHERE email = ?");
-            $stmt->execute([$email]);
-            $user = $stmt->fetch();
-            
-            if ($user) {
-                $token = bin2hex(random_bytes(32));
-                $expires = date('Y-m-d H:i:s', time() + 3600);
-                
-                $stmt = $pdo->prepare("UPDATE users SET password_reset_token = ?, password_reset_expires = ? WHERE email = ?");
-                $stmt->execute([$token, $expires, $email]);
-
-                if (sendPasswordResetEmail($email, $token)) {
-                    $success = 'Ссылка для сброса пароля была отправлена на вашу почту.';
-                } else {
-                    $error = 'Возникла ошибка при попытке сброса пароля.';
-                }
+            if (!$pdo) {
+                $error = 'Ошибка подключения к базе данных. Попробуйте позже.';
             } else {
-                $success = 'Если эта почта существует, ссылка для сброса пароля была отправлена на вашу почту.';
+                $stmt = $pdo->prepare("SELECT id FROM users WHERE email = ?");
+                $stmt->execute([$email]);
+                $user = $stmt->fetch();
+                
+                if ($user) {
+                    $token = bin2hex(random_bytes(32));
+                    $expires = date('Y-m-d H:i:s', time() + 3600);
+                    
+                    $stmt = $pdo->prepare("UPDATE users SET password_reset_token = ?, password_reset_expires = ? WHERE email = ?");
+                    $stmt->execute([$token, $expires, $email]);
+
+                    // Увеличиваем время выполнения для отправки email
+                    set_time_limit(60);
+                    
+                    // Пытаемся отправить email, но не блокируем процесс
+                    $emailSent = @sendPasswordResetEmail($email, $token);
+                    
+                    // Всегда показываем успех для безопасности (не раскрываем, существует ли email)
+                    $success = 'Если эта почта существует, ссылка для сброса пароля была отправлена на вашу почту.';
+                    
+                    // Логируем результат для отладки
+                    if (!$emailSent) {
+                        error_log("Failed to send password reset email to: $email");
+                    }
+                } else {
+                    // Для безопасности показываем то же сообщение
+                    $success = 'Если эта почта существует, ссылка для сброса пароля была отправлена на вашу почту.';
+                }
             }
         } catch (PDOException $e) {
+            error_log("Password reset error: " . $e->getMessage());
+            $error = 'Произошла ошибка, попробуйте еще раз.';
+        } catch (Exception $e) {
+            error_log("Password reset error: " . $e->getMessage());
             $error = 'Произошла ошибка, попробуйте еще раз.';
         }
     }
