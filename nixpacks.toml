@@ -2,8 +2,10 @@
 nixPkgs = ["php82", "php82Packages.composer"]
 
 [phases.install]
-cmds = ["composer install --no-dev --optimize-autoloader"]
+cmds = [
+    "composer install --no-dev --optimize-autoloader || true"
+]
 
 [start]
-cmd = "php -S 0.0.0.0:$PORT"
+cmd = "php -S 0.0.0.0:${PORT} -t ."
 
