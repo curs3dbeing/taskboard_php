@@ -1,18 +1,18 @@
 <?php
-// Включаем обработку ошибок для production
+
 error_reporting(E_ALL);
 ini_set('display_errors', 0);
 ini_set('log_errors', 1);
 
-// Загружаем config.php без немедленного подключения к БД
+
 require_once 'config.php';
 
-// Проверяем подключение к БД только при необходимости
+
 try {
-    // Тестируем подключение, но не падаем если не удалось
+
     $testConnection = @getDBConnection();
     if (!$testConnection) {
-        // Если БД не доступна, показываем информативную страницу
+
         http_response_code(503);
         ?>
         <!DOCTYPE html>

@@ -11,17 +11,17 @@ if (empty($token)) {
     try {
         $pdo = getDBConnection();
         
-        // Сначала проверим, существует ли токен вообще
+
         $stmt = $pdo->prepare("SELECT id, password_reset_expires FROM users WHERE password_reset_token = ?");
         $stmt->execute([$token]);
         $user = $stmt->fetch();
         
         if (!$user) {
             $error = 'Неверная или недействительная ссылка для сброса пароля. Пожалуйста, запросите новую ссылку.';
-            $token = ''; // Очищаем токен, чтобы форма не показывалась
+            $token = '';
         } elseif (empty($user['password_reset_expires']) || strtotime($user['password_reset_expires']) < time()) {
             $error = 'Ссылка для сброса пароля истекла или недействительна. Пожалуйста, запросите новую ссылку.';
-            $token = ''; // Очищаем токен, чтобы форма не показывалась
+            $token = ''; 
         } elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $password = $_POST['password'] ?? '';
             $confirm_password = $_POST['confirm_password'] ?? '';

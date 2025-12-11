@@ -6,13 +6,11 @@ define('DB_USER', getenv('DB_USER') ?: getenv('MYSQLUSER') ?: 'root');
 define('DB_PASS', getenv('DB_PASS') ?: getenv('MYSQLPASSWORD') ?: 'CaDCLkuDVllroHlKErMTxTqCadraZMtp');
 
 
-// Email API Configuration (Resend API)
-// Получите API ключ на https://resend.com/api-keys
+
 define('RESEND_API_KEY', getenv('RESEND_API_KEY') ?: '');
 define('RESEND_FROM_EMAIL', getenv('RESEND_FROM_EMAIL') ?: 'onboarding@resend.dev');
 define('RESEND_FROM_NAME', 'Task Planner');
 
-// Fallback SMTP (для локальной разработки, если нужно)
 define('SMTP_HOST', 'smtp.gmail.com');
 define('SMTP_PORT', 587);
 define('SMTP_USER', getenv('SMTP_USER_GM') ?: '');
@@ -93,17 +91,15 @@ function sendPasswordResetEmail($email, $token) {
     $subject = "Запрос на сброс пароля";
     $message = "Здравствуйте,\n\nВы запросили сброс пароля. Перейдите по ссылке ниже, чтобы установить новый пароль:\n\n" . $resetLink . "\n\nЭта ссылка действительна в течение 1 часа.\n\nЕсли вы не запрашивали сброс пароля, проигнорируйте это письмо.";
 
-    // Используем Resend API (рекомендуется для Railway)
     if (!empty(RESEND_API_KEY)) {
         return sendEmailWithResend($email, $subject, $message);
     }
     
-    // Fallback на PHPMailer если доступен
     if (file_exists(__DIR__ . '/PHPMailer/PHPMailer.php')) {
         return sendEmailWithPHPMailer($email, $subject, $message);
     }
 
-    // Fallback на SMTP (только для локальной разработки)
+
     return sendEmailWithSMTP($email, $subject, $message);
 }
 

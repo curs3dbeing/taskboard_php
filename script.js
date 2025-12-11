@@ -1,6 +1,6 @@
-// Form validation
+
 document.addEventListener('DOMContentLoaded', function() {
-    // Password confirmation validation
+
     const confirmPasswordInput = document.getElementById('confirm_password');
     const passwordInput = document.getElementById('password');
     
@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function() {
         confirmPasswordInput.addEventListener('input', validatePasswordMatch);
     }
     
-    // Email validation
+
     const emailInput = document.getElementById('email');
     if (emailInput && emailInput.type === 'text') {
         emailInput.addEventListener('blur', function() {
@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Username length validation
+
     const usernameInput = document.getElementById('username');
     if (usernameInput && usernameInput.hasAttribute('minlength')) {
         usernameInput.addEventListener('input', function() {
@@ -99,24 +99,24 @@ function editTask(id, name, description, priority) {
     openTaskModal(id, name, description, priority);
 }
 
-// Переключение вкладок
+
 function switchTab(tabName) {
-    // Скрыть все вкладки
+
     document.querySelectorAll('.tab-content').forEach(content => {
         content.classList.remove('active');
     });
     
-    // Убрать активный класс со всех кнопок
+
     document.querySelectorAll('.tab-btn').forEach(btn => {
         btn.classList.remove('active');
     });
     
-    // Показать выбранную вкладку
+
     document.getElementById('content-' + tabName).classList.add('active');
     document.getElementById('tab-' + tabName).classList.add('active');
 }
 
-// Переключение статуса задачи
+
 function toggleTask(taskId, completed) {
     const form = document.createElement('form');
     form.method = 'POST';

@@ -9,15 +9,24 @@ if (!$pdo) {
 
 $user_id = getCurrentUserId();
 
-// Получаем активные задачи (не выполненные) с сортировкой по приоритету и дате создания
-$stmt = $pdo->prepare("SELECT * FROM tasks WHERE user_id = ? AND completed = 0 ORDER BY priority ASC, created_at DESC");
+$stmt = $pdo->prepare("SELECT * FROM tasks WHERE user_id = ? AND completed = 0 AND group_id IS NULL ORDER BY priority ASC, created_at DESC");
 $stmt->execute([$user_id]);
 $tasks = $stmt->fetchAll();
 
 
-$stmt = $pdo->prepare("SELECT * FROM tasks WHERE user_id = ? AND completed = 1 ORDER BY updated_at DESC");
+$stmt = $pdo->prepare("SELECT * FROM tasks WHERE user_id = ? AND completed = 1 AND group_id IS NULL ORDER BY updated_at DESC");
 $stmt->execute([$user_id]);
 $completedTasks = $stmt->fetchAll();
+
+
+$stmt = $pdo->prepare("SELECT g.* FROM user_groups g WHERE g.owner_id = ? 
+                       UNION 
+                       SELECT g.* FROM user_groups g 
+                       INNER JOIN group_members gm ON g.id = gm.group_id 
+                       WHERE gm.user_id = ? 
+                       ORDER BY created_at DESC");
+$stmt->execute([$user_id, $user_id]);
+$userGroups = $stmt->fetchAll();
 
 
 function getPriorityName($priority) {
@@ -57,6 +66,7 @@ if (isset($_GET['message'])) {
         <header class="header">
             <h1>Таблица задач</h1>
             <div class="user-info">
+                <a href="groups.php" class="btn btn-secondary">Группы</a>
                 <span>Здравствуйте, <?php echo htmlspecialchars($_SESSION['username']); ?>!</span>
                 <a href="logout.php" class="btn btn-secondary">Выйти</a>
             </div>
@@ -72,18 +82,32 @@ if (isset($_GET['message'])) {
                 <button class="btn btn-primary" onclick="openTaskModal()">+ Новая задача</button>
             </div>
 
-            <!-- Вкладки -->
+            <!-- Вкладки групп -->
             <div class="tabs">
-                <button class="tab-btn active" onclick="switchTab('active')" id="tab-active">
+                <button class="tab-btn active" id="tab-personal">
+                    Мои задачи
+                </button>
+                <?php foreach ($userGroups as $group): ?>
+                    <button class="tab-btn" onclick="window.location.href='group_dashboard.php?group_id=<?php echo $group['id']; ?>'" id="tab-group-<?php echo $group['id']; ?>">
+                        <?php echo htmlspecialchars($group['name']); ?>
+                    </button>
+                <?php endforeach; ?>
+            </div>
+            
+            <!-- Вкладки для личных задач -->
+            <div class="tabs" style="margin-top: 10px;">
+                <button class="tab-btn active" onclick="switchPersonalTab('active')" id="personal-tab-active">
                     Активные задачи <span class="tab-count">(<?php echo count($tasks); ?>)</span>
                 </button>
-                <button class="tab-btn" onclick="switchTab('completed')" id="tab-completed">
+                <button class="tab-btn" onclick="switchPersonalTab('completed')" id="personal-tab-completed">
                     Выполненные <span class="tab-count">(<?php echo count($completedTasks); ?>)</span>
                 </button>
             </div>
 
-            <!-- Активные задачи -->
-            <div class="tab-content active" id="content-active">
+            <!-- Личные задачи -->
+            <div class="tab-content active" id="content-personal">
+                <!-- Активные задачи -->
+                <div class="personal-tab-content active" id="personal-content-active">
                 <div class="tasks-grid" id="tasksGrid">
                     <?php if (empty($tasks)): ?>
                         <div class="empty-state">
@@ -125,10 +149,9 @@ if (isset($_GET['message'])) {
                         <?php endforeach; ?>
                     <?php endif; ?>
                 </div>
-            </div>
-
-            <!-- Выполненные задачи -->
-            <div class="tab-content" id="content-completed">
+                
+                <!-- Выполненные задачи -->
+                <div class="personal-tab-content" id="personal-content-completed">
                 <div class="tasks-grid" id="completedTasksGrid">
                     <?php if (empty($completedTasks)): ?>
                         <div class="empty-state">
@@ -180,11 +203,11 @@ if (isset($_GET['message'])) {
                 <input type="hidden" id="taskId" name="task_id" value="">
                 <div class="form-group">
                     <label for="taskName">Название задачи</label>
-                    <input type="text" id="taskName" name="name" required maxlength="255">
+                    <input type="text" id="taskName" name="name" required maxlength="35">
                 </div>
                 <div class="form-group">
                     <label for="taskDescription">Описание</label>
-                    <textarea id="taskDescription" name="description" rows="4"></textarea>
+                    <textarea id="taskDescription" name="description" rows="4" maxlength="100"></textarea>
                 </div>
                 <div class="form-group">
                     <label for="taskPriority">Важность</label>
@@ -202,6 +225,41 @@ if (isset($_GET['message'])) {
         </div>
     </div>
 
+    <script>
+        function switchTab(tab) {
+            if (tab === 'personal') {
+
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    if (content.id === 'content-personal') {
+                        content.classList.add('active');
+                    } else {
+                        content.classList.remove('active');
+                    }
+                });
+                
+
+                document.querySelectorAll('.tabs .tab-btn').forEach(btn => {
+                    if (btn.id === 'tab-personal') {
+                        btn.classList.add('active');
+                    } else {
+                        btn.classList.remove('active');
+                    }
+                });
+            }
+        }
+        
+        function switchPersonalTab(tab) {
+            document.querySelectorAll('.personal-tab-content').forEach(content => content.classList.remove('active'));
+            document.querySelectorAll('.tabs .tab-btn').forEach(btn => {
+                if (btn.id.startsWith('personal-tab-')) {
+                    btn.classList.remove('active');
+                }
+            });
+            
+            document.getElementById('personal-content-' + tab).classList.add('active');
+            document.getElementById('personal-tab-' + tab).classList.add('active');
+        }
+    </script>
     <script src="script.js"></script>
 </body>
 </html>

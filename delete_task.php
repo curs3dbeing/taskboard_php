@@ -6,23 +6,52 @@ $pdo = getDBConnection();
 $user_id = getCurrentUserId();
 
 $task_id = $_GET['id'] ?? null;
+$group_id = isset($_GET['group_id']) && $_GET['group_id'] ? (int)$_GET['group_id'] : null;
 
 if (!$task_id) {
-    header('Location: dashboard.php?message=' . urlencode('Неверный ID задачи.'));
+    $redirect = $group_id ? "group_dashboard.php?group_id=$group_id" : 'dashboard.php';
+    header('Location: ' . $redirect . '?message=' . urlencode('Неверный ID задачи.'));
     exit;
 }
 
 try {
-    $stmt = $pdo->prepare("DELETE FROM tasks WHERE id = ? AND user_id = ?");
-    $stmt->execute([$task_id, $user_id]);
+
+    $stmt = $pdo->prepare("SELECT t.* FROM tasks t WHERE t.id = ?");
+    $stmt->execute([$task_id]);
+    $task = $stmt->fetch();
+    
+    if (!$task) {
+        $redirect = $group_id ? "group_dashboard.php?group_id=$group_id" : 'dashboard.php';
+        header('Location: ' . $redirect . '?message=' . urlencode('Задача не найдена.'));
+        exit;
+    }
+    
+
+    if ($task['user_id'] != $user_id) {
+        $redirect = $task['group_id'] ? "group_dashboard.php?group_id={$task['group_id']}" : 'dashboard.php';
+        header('Location: ' . $redirect . '?message=' . urlencode('У вас нет прав для удаления этой задачи.'));
+        exit;
+    }
+    
+    if ($task['group_id']) {
+        $stmt = $pdo->prepare("DELETE FROM tasks WHERE id = ? AND user_id = ? AND group_id = ?");
+        $stmt->execute([$task_id, $user_id, $task['group_id']]);
+    } else {
+        $stmt = $pdo->prepare("DELETE FROM tasks WHERE id = ? AND user_id = ? AND group_id IS NULL");
+        $stmt->execute([$task_id, $user_id]);
+    }
     
     if ($stmt->rowCount() > 0) {
-        header('Location: dashboard.php?message=' . urlencode('Задача успешно удалена!'));
+        $redirect = $task['group_id'] ? "group_dashboard.php?group_id={$task['group_id']}" : 'dashboard.php';
+        header('Location: ' . $redirect . '?message=' . urlencode('Задача успешно удалена!'));
     } else {
-        header('Location: dashboard.php?message=' . urlencode('Задача не найдена или у вас нет прав.'));
+        $redirect = $group_id ? "group_dashboard.php?group_id=$group_id" : 'dashboard.php';
+        header('Location: ' . $redirect . '?message=' . urlencode('Задача не найдена или у вас нет прав.'));
     }
 } catch (PDOException $e) {
-    header('Location: dashboard.php?message=' . urlencode('Произошла ошибка. Пожалуйста, попробуйте еще раз.'));
+    error_log("Delete task error: " . $e->getMessage());
+    $redirect = $group_id ? "group_dashboard.php?group_id=$group_id" : 'dashboard.php';
+    header('Location: ' . $redirect . '?message=' . urlencode('Произошла ошибка. Пожалуйста, попробуйте еще раз.'));
 }
 exit;
 
