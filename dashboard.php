@@ -65,7 +65,17 @@ if (isset($_GET['message'])) {
     <div class="container">
         <header class="header">
             <h1>Таблица задач</h1>
+            <button class="burger-menu" onclick="toggleMobileMenu()" aria-label="Меню">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
             <div class="user-info">
+                <a href="groups.php" class="btn btn-secondary">Группы</a>
+                <span>Здравствуйте, <?php echo htmlspecialchars($_SESSION['username']); ?>!</span>
+                <a href="logout.php" class="btn btn-secondary">Выйти</a>
+            </div>
+            <div class="mobile-menu" id="mobileMenu">
                 <a href="groups.php" class="btn btn-secondary">Группы</a>
                 <span>Здравствуйте, <?php echo htmlspecialchars($_SESSION['username']); ?>!</span>
                 <a href="logout.php" class="btn btn-secondary">Выйти</a>
@@ -260,6 +270,27 @@ if (isset($_GET['message'])) {
             document.getElementById('personal-content-' + tab).classList.add('active');
             document.getElementById('personal-tab-' + tab).classList.add('active');
         }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            const burger = document.querySelector('.burger-menu');
+            menu.classList.toggle('active');
+            burger.classList.toggle('active');
+        }
+
+        // Закрытие меню при клике вне его
+        document.addEventListener('click', function(event) {
+            const menu = document.getElementById('mobileMenu');
+            const burger = document.querySelector('.burger-menu');
+            const header = document.querySelector('.header');
+            
+            if (menu && burger && header) {
+                if (!header.contains(event.target) && menu.classList.contains('active')) {
+                    menu.classList.remove('active');
+                    burger.classList.remove('active');
+                }
+            }
+        });
     </script>
     <script src="script.js"></script>
 </body>

@@ -154,7 +154,17 @@ if (isset($_GET['message'])) {
     <div class="container">
         <header class="header">
             <h1>Управление группами</h1>
+            <button class="burger-menu" onclick="toggleMobileMenu()" aria-label="Меню">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
             <div class="user-info">
+                <a href="dashboard.php" class="btn btn-secondary">Мои задачи</a>
+                <span>Здравствуйте, <?php echo htmlspecialchars($_SESSION['username']); ?>!</span>
+                <a href="logout.php" class="btn btn-secondary">Выйти</a>
+            </div>
+            <div class="mobile-menu" id="mobileMenu">
                 <a href="dashboard.php" class="btn btn-secondary">Мои задачи</a>
                 <span>Здравствуйте, <?php echo htmlspecialchars($_SESSION['username']); ?>!</span>
                 <a href="logout.php" class="btn btn-secondary">Выйти</a>
@@ -365,6 +375,27 @@ if (isset($_GET['message'])) {
 
             window.location.href = 'leave_group.php?group_id=' + groupId;
         }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            const burger = document.querySelector('.burger-menu');
+            menu.classList.toggle('active');
+            burger.classList.toggle('active');
+        }
+
+        // Закрытие меню при клике вне его
+        document.addEventListener('click', function(event) {
+            const menu = document.getElementById('mobileMenu');
+            const burger = document.querySelector('.burger-menu');
+            const header = document.querySelector('.header');
+            
+            if (menu && burger && header) {
+                if (!header.contains(event.target) && menu.classList.contains('active')) {
+                    menu.classList.remove('active');
+                    burger.classList.remove('active');
+                }
+            }
+        });
     </script>
 </body>
 </html>
