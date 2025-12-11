@@ -64,15 +64,6 @@ $stmt = $pdo->prepare("SELECT t.*, u.username as creator_name
 $stmt->execute([$group_id]);
 $completedTasks = $stmt->fetchAll();
 
-$stmt = $pdo->prepare("SELECT g.* FROM user_groups g WHERE g.owner_id = ? 
-                       UNION 
-                       SELECT g.* FROM user_groups g 
-                       INNER JOIN group_members gm ON g.id = gm.group_id 
-                       WHERE gm.user_id = ? 
-                       ORDER BY created_at DESC");
-$stmt->execute([$user_id, $user_id]);
-$userGroups = $stmt->fetchAll();
-
 function getPriorityName($priority) {
     switch($priority) {
         case 1: return 'Критическая';
@@ -143,16 +134,6 @@ if (isset($_GET['message'])) {
             </div>
         <?php endif; ?>
 
-        <div class="tabs">
-            <button class="tab-btn active" id="tab-personal">
-                Мои задачи
-            </button>
-            <?php foreach ($userGroups as $group): ?>
-                <button class="tab-btn" onclick="window.location.href='group_dashboard.php?group_id=<?php echo $group['id']; ?>'" id="tab-group-<?php echo $group['id']; ?>">
-                    <?php echo htmlspecialchars($group['name']); ?>
-                </button>
-            <?php endforeach; ?>
-        </div>
 
         <div class="task-section">
             <div class="task-header">
