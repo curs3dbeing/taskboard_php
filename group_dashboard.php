@@ -285,11 +285,14 @@ if (isset($_GET['message'])) {
                 document.getElementById('taskPriority').value = 2;
             }
             
-            modal.style.display = 'block';
+            modal.classList.add('show');
         }
 
         function closeTaskModal() {
-            document.getElementById('taskModal').style.display = 'none';
+            const modal = document.getElementById('taskModal');
+            const form = document.getElementById('taskForm');
+            modal.classList.remove('show');
+            form.reset();
         }
 
         function editTask(id, name, description, priority) {

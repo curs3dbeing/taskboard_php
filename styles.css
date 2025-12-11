@@ -300,6 +300,14 @@ body {
     display: block;
 }
 
+.personal-tab-content {
+    display: none;
+}
+
+.personal-tab-content.active {
+    display: block;
+}
+
 /* Tasks Grid */
 .tasks-grid {
     display: grid;
