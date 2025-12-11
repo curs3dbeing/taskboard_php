@@ -64,6 +64,15 @@ $stmt = $pdo->prepare("SELECT t.*, u.username as creator_name
 $stmt->execute([$group_id]);
 $completedTasks = $stmt->fetchAll();
 
+$stmt = $pdo->prepare("SELECT g.* FROM user_groups g WHERE g.owner_id = ? 
+                       UNION 
+                       SELECT g.* FROM user_groups g 
+                       INNER JOIN group_members gm ON g.id = gm.group_id 
+                       WHERE gm.user_id = ? 
+                       ORDER BY created_at DESC");
+$stmt->execute([$user_id, $user_id]);
+$userGroups = $stmt->fetchAll();
+
 function getPriorityName($priority) {
     switch($priority) {
         case 1: return 'Критическая';
