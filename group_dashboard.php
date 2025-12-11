@@ -134,6 +134,17 @@ if (isset($_GET['message'])) {
             </div>
         <?php endif; ?>
 
+        <div class="tabs">
+            <button class="tab-btn active" id="tab-personal">
+                Мои задачи
+            </button>
+            <?php foreach ($userGroups as $group): ?>
+                <button class="tab-btn" onclick="window.location.href='group_dashboard.php?group_id=<?php echo $group['id']; ?>'" id="tab-group-<?php echo $group['id']; ?>">
+                    <?php echo htmlspecialchars($group['name']); ?>
+                </button>
+            <?php endforeach; ?>
+        </div>
+
         <div class="task-section">
             <div class="task-header">
                 <h2>Задачи группы</h2>
