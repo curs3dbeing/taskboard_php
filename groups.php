@@ -199,7 +199,7 @@ if (isset($_GET['message'])) {
                                     <p><?php echo htmlspecialchars($group['description']); ?></p>
                                 <?php endif; ?>
                                 <div class="group-meta">
-                                    <span>Участников: <?php echo $group['member_count'] + 1; ?></span>
+                                    <span>Участников: <?php echo $group['member_count']; ?></span>
                                     <span>Создана: <?php echo date('d.m.Y', strtotime($group['created_at'])); ?></span>
                                 </div>
                                 <div class="group-actions">
@@ -267,7 +267,7 @@ if (isset($_GET['message'])) {
                                     <p><?php echo htmlspecialchars($group['description']); ?></p>
                                 <?php endif; ?>
                                 <div class="group-meta">
-                                    <span>Участников: <?php echo $group['member_count'] + 1; ?></span>
+                                    <span>Участников: <?php echo $group['member_count']; ?></span>
                                     <span>Создана: <?php echo date('d.m.Y', strtotime($group['created_at'])); ?></span>
                                 </div>
                                 <div class="group-actions">

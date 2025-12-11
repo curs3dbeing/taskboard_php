@@ -31,11 +31,6 @@ try {
     $stmt = $pdo->prepare("INSERT INTO user_groups (name, description, owner_id) VALUES (?, ?, ?)");
     $stmt->execute([$name, $description ?: null, $user_id]);
     
-    $group_id = $pdo->lastInsertId();
-    
-    $stmt = $pdo->prepare("INSERT INTO group_members (group_id, user_id) VALUES (?, ?) ON DUPLICATE KEY UPDATE group_id = group_id");
-    $stmt->execute([$group_id, $user_id]);
-    
     header('Location: groups.php?message=' . urlencode('Группа успешно создана!'));
 } catch (PDOException $e) {
     error_log("Create group error: " . $e->getMessage());

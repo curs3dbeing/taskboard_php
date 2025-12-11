@@ -65,7 +65,7 @@ try {
     
 
     if ($group['owner_id'] == $user['id']) {
-        echo json_encode(['success' => false, 'message' => 'Владелец группы уже является участником.']);
+        echo json_encode(['success' => false, 'message' => 'Владелец группы не может быть добавлен как участник.']);
         exit;
     }
     
