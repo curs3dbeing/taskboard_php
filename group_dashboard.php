@@ -102,6 +102,9 @@ if (isset($_GET['message'])) {
             <div class="user-info">
                 <a href="dashboard.php" class="btn btn-secondary">Мои задачи</a>
                 <a href="groups.php" class="btn btn-secondary">Группы</a>
+                <?php if (!$group['is_owner'] && $group['is_member']): ?>
+                    <a href="leave_group.php?group_id=<?php echo $group_id; ?>" class="btn btn-danger" onclick="return confirm('Вы уверены, что хотите покинуть группу \'<?php echo htmlspecialchars(addslashes($group['name'])); ?>\'?')">Покинуть группу</a>
+                <?php endif; ?>
                 <span>Здравствуйте, <?php echo htmlspecialchars($_SESSION['username']); ?>!</span>
                 <a href="logout.php" class="btn btn-secondary">Выйти</a>
             </div>

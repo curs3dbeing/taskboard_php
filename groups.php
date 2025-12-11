@@ -272,6 +272,7 @@ if (isset($_GET['message'])) {
                                 </div>
                                 <div class="group-actions">
                                     <a href="group_dashboard.php?group_id=<?php echo $group['id']; ?>" class="btn btn-primary btn-small">Открыть</a>
+                                    <button class="btn btn-danger btn-small" onclick="leaveGroup(<?php echo $group['id']; ?>, '<?php echo htmlspecialchars(addslashes($group['name'])); ?>')" title="Покинуть группу">Покинуть</button>
                                 </div>
                             </div>
                         <?php endforeach; ?>
@@ -355,6 +356,14 @@ if (isset($_GET['message'])) {
             }
 
             window.location.href = 'delete_group.php?id=' + groupId;
+        }
+
+        function leaveGroup(groupId, groupName) {
+            if (!confirm('Вы уверены, что хотите покинуть группу "' + groupName + '"?\n\nПосле выхода вы потеряете доступ к задачам этой группы.')) {
+                return;
+            }
+
+            window.location.href = 'leave_group.php?group_id=' + groupId;
         }
     </script>
 </body>
