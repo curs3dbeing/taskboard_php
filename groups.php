@@ -95,6 +95,21 @@ if (isset($_GET['message'])) {
             padding: 6px 12px;
             font-size: 14px;
         }
+        .btn-danger {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .btn-danger:hover {
+            background-color: #c82333;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
         .create-group-form {
             background: white;
             border-radius: 8px;
@@ -190,6 +205,7 @@ if (isset($_GET['message'])) {
                                 <div class="group-actions">
                                     <a href="group_dashboard.php?group_id=<?php echo $group['id']; ?>" class="btn btn-primary btn-small">Открыть</a>
                                     <button class="btn btn-secondary btn-small" onclick="openManageMembers(<?php echo $group['id']; ?>, '<?php echo htmlspecialchars(addslashes($group['name'])); ?>')">Управление</button>
+                                    <button class="btn btn-danger btn-small" onclick="deleteGroup(<?php echo $group['id']; ?>, '<?php echo htmlspecialchars(addslashes($group['name'])); ?>')" title="Удалить группу">Удалить</button>
                                 </div>
                                 
                                 <!-- Список участников -->
@@ -331,6 +347,14 @@ if (isset($_GET['message'])) {
             .catch(error => {
                 alert('Произошла ошибка: ' + error);
             });
+        }
+
+        function deleteGroup(groupId, groupName) {
+            if (!confirm('Вы уверены, что хотите удалить группу "' + groupName + '"?\n\nЭто действие удалит группу, всех участников и все задачи группы. Это действие нельзя отменить.')) {
+                return;
+            }
+
+            window.location.href = 'delete_group.php?id=' + groupId;
         }
     </script>
 </body>
