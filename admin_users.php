@@ -25,13 +25,29 @@ foreach ($users as $user) {
     $stats = $stmt->fetch();
     $userStats[$user['id']] = $stats;
 }
+
+// Get user email
+$user_id = getCurrentUserId();
+$stmt = $pdo->prepare("SELECT email FROM users WHERE id = ?");
+$stmt->execute([$user_id]);
+$userEmail = $stmt->fetchColumn();
+
+// Get user groups for sidebar
+$stmt = $pdo->prepare("SELECT g.* FROM user_groups g WHERE g.owner_id = ? 
+                       UNION 
+                       SELECT g.* FROM user_groups g 
+                       INNER JOIN group_members gm ON g.id = gm.group_id 
+                       WHERE gm.user_id = ? 
+                       ORDER BY created_at DESC");
+$stmt->execute([$user_id, $user_id]);
+$userGroups = $stmt->fetchAll();
 ?>
 <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Управление пользователями</title>
+    <title>Управление пользователями - NotesHub</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -65,10 +81,11 @@ foreach ($users as $user) {
         }
         .search-container {
             margin-bottom: 20px;
-            padding: 20px;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            padding: 24px;
+            background: var(--card-background);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            box-shadow: var(--shadow);
         }
         .search-row {
             display: flex;
@@ -90,17 +107,23 @@ foreach ($users as $user) {
         .search-group input,
         .search-group select {
             width: 100%;
-            padding: 10px;
-            border: 2px solid var(--border-color);
-            border-radius: 6px;
-            font-size: 16px;
+            padding: 10px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 14px;
             font-family: inherit;
-            transition: border-color 0.3s ease;
+            transition: all 0.2s ease;
+            background: var(--background-secondary);
+            color: var(--text-primary);
         }
         .search-group input:focus,
         .search-group select:focus {
             outline: none;
             border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.1);
+        }
+        .search-group input::placeholder {
+            color: var(--text-muted);
         }
         .search-actions {
             display: flex;
@@ -114,6 +137,12 @@ foreach ($users as $user) {
             color: var(--text-secondary);
             font-size: 14px;
         }
+        .task-section h2 {
+            color: var(--text-primary);
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 24px;
+        }
         .users-table tbody tr.hidden {
             display: none;
         }
@@ -126,25 +155,33 @@ foreach ($users as $user) {
             width: 100%;
             min-width: 800px;
             border-collapse: collapse;
-            background: white;
-            border-radius: 8px;
+            background: var(--card-background);
+            border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
         }
         .users-table th,
         .users-table td {
             padding: 12px;
             text-align: left;
-            border-bottom: 1px solid #e0e0e0;
+            border-bottom: 1px solid var(--border-color);
             white-space: nowrap;
+            color: var(--text-primary);
         }
         .users-table th {
-            background-color: #f5f7fa;
+            background: var(--background-secondary);
             font-weight: 600;
-            color: #2c3e50;
+            color: var(--text-primary);
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
-        .users-table tr:hover {
-            background-color: #f8f9fa;
+        .users-table tbody tr {
+            transition: background 0.2s ease;
+        }
+        .users-table tbody tr:hover {
+            background: var(--card-hover);
         }
         .users-table td:last-child {
             white-space: normal;
@@ -159,20 +196,24 @@ foreach ($users as $user) {
             white-space: nowrap;
         }
         .badge-admin {
-            background-color: #dc3545;
-            color: white;
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--priority-critical);
+            border: 1px solid var(--priority-critical);
         }
         .badge-user {
-            background-color: #6c757d;
-            color: white;
+            background: rgba(107, 114, 128, 0.2);
+            color: var(--text-secondary);
+            border: 1px solid var(--text-secondary);
         }
         .badge-blocked {
-            background-color: #dc3545;
-            color: white;
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--priority-critical);
+            border: 1px solid var(--priority-critical);
         }
         .badge-active {
-            background-color: #28a745;
-            color: white;
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--priority-low);
+            border: 1px solid var(--priority-low);
         }
         .action-buttons {
             display: flex;
@@ -185,18 +226,19 @@ foreach ($users as $user) {
             white-space: nowrap;
         }
         .btn-warning {
-            background-color: #ffc107;
-            color: #212529;
+            background: rgba(245, 158, 11, 0.2);
+            color: var(--priority-high);
+            border: 1px solid var(--priority-high);
         }
         .btn-warning:hover {
-            background-color: #e0a800;
+            background: rgba(245, 158, 11, 0.3);
         }
         .btn-danger {
-            background-color: #dc3545;
+            background-color: var(--error-color);
             color: white;
         }
         .btn-danger:hover {
-            background-color: #c82333;
+            background-color: #dc2626;
         }
         .modal {
             display: none;
@@ -225,15 +267,29 @@ foreach ($users as $user) {
             white-space: normal;
         }
         .tasks-list {
-            max-height: 300px;
+            max-height: 400px;
             overflow-y: auto;
             margin-top: 10px;
             word-wrap: break-word;
             overflow-wrap: break-word;
         }
+        .tasks-list::-webkit-scrollbar {
+            width: 8px;
+        }
+        .tasks-list::-webkit-scrollbar-track {
+            background: var(--background-secondary);
+            border-radius: 4px;
+        }
+        .tasks-list::-webkit-scrollbar-thumb {
+            background: var(--border-light);
+            border-radius: 4px;
+        }
+        .tasks-list::-webkit-scrollbar-thumb:hover {
+            background: var(--text-muted);
+        }
         .task-item {
-            padding: 8px;
-            border-bottom: 1px solid #e0e0e0;
+            padding: 12px;
+            border-bottom: 1px solid var(--border-color);
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
@@ -241,6 +297,10 @@ foreach ($users as $user) {
             gap: 10px;
             word-wrap: break-word;
             overflow-wrap: break-word;
+            transition: background 0.2s ease;
+        }
+        .task-item:hover {
+            background: var(--card-hover);
         }
         .task-item:last-child {
             border-bottom: none;
@@ -251,6 +311,7 @@ foreach ($users as $user) {
             word-wrap: break-word;
             overflow-wrap: break-word;
             white-space: normal;
+            color: var(--text-primary);
         }
         .task-item > div strong {
             word-wrap: break-word;
@@ -258,6 +319,8 @@ foreach ($users as $user) {
             white-space: normal;
             display: block;
             margin-bottom: 5px;
+            color: var(--text-primary);
+            font-size: 14px;
         }
         .task-item > div small {
             word-wrap: break-word;
@@ -265,6 +328,8 @@ foreach ($users as $user) {
             white-space: normal;
             display: block;
             line-height: 1.4;
+            color: var(--text-secondary);
+            font-size: 12px;
         }
         .task-item button {
             flex-shrink: 0;
@@ -387,38 +452,111 @@ foreach ($users as $user) {
     </style>
 </head>
 <body>
-    <div class="container">
-        <header class="header">
-            <h1>Управление пользователями</h1>
-            <button class="burger-menu" onclick="toggleMobileMenu()" aria-label="Меню">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-            <div class="user-info">
-                <div class="admin-nav">
-                    <a href="dashboard.php" class="btn btn-secondary">Мои задачи</a>
-                    <a href="groups.php" class="btn btn-secondary">Группы</a>
-                    <a href="admin_groups.php" class="btn btn-secondary">Управление группами</a>
+    <div class="main-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-logo">
+                <div class="sidebar-logo-icon">N</div>
+                <div class="sidebar-logo-text">
+                    <h1>NotesHub</h1>
+                    <p>Командные заметки</p>
                 </div>
-                <span>Администратор: <?php echo htmlspecialchars($_SESSION['username']); ?></span>
-                <a href="logout.php" class="btn btn-secondary">Выйти</a>
             </div>
-            <div class="mobile-menu" id="mobileMenu">
-                <a href="dashboard.php" class="btn btn-secondary">Мои задачи</a>
-                <a href="groups.php" class="btn btn-secondary">Группы</a>
-                <a href="admin_groups.php" class="btn btn-secondary">Управление группами</a>
-                <span>Администратор: <?php echo htmlspecialchars($_SESSION['username']); ?></span>
-                <a href="logout.php" class="btn btn-secondary">Выйти</a>
+            
+            <div class="sidebar-section">
+                <div class="sidebar-section-header">
+                    <h3>ГРУППЫ</h3>
+                    <button onclick="window.location.href='groups.php'" title="Управление группами">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor">
+                            <path d="M8 4v8M4 8h8"/>
+                        </svg>
+                    </button>
+                </div>
+                <a href="dashboard.php" class="sidebar-item">
+                    <span class="sidebar-item-text">Все заметки</span>
+                    <svg class="sidebar-item-arrow" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor">
+                        <path d="M6 4l4 4-4 4"/>
+                    </svg>
+                </a>
+                <?php foreach ($userGroups as $g): ?>
+                    <a href="group_dashboard.php?group_id=<?php echo $g['id']; ?>" class="sidebar-item">
+                        <span class="sidebar-item-dot purple"></span>
+                        <span class="sidebar-item-text"><?php echo htmlspecialchars($g['name']); ?></span>
+                        <svg class="sidebar-item-arrow" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor">
+                            <path d="M6 4l4 4-4 4"/>
+                        </svg>
+                    </a>
+                <?php endforeach; ?>
             </div>
-        </header>
+            
+            <div class="sidebar-section">
+                <div class="sidebar-section-header">
+                    <h3>АДМИН-ПАНЕЛЬ</h3>
+                </div>
+                <a href="admin_users.php" class="sidebar-item active">
+                    <span class="sidebar-item-text">Пользователи</span>
+                    <svg class="sidebar-item-arrow" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor">
+                        <path d="M6 4l4 4-4 4"/>
+                    </svg>
+                </a>
+                <a href="admin_groups.php" class="sidebar-item">
+                    <span class="sidebar-item-text">Управление группами</span>
+                    <svg class="sidebar-item-arrow" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor">
+                        <path d="M6 4l4 4-4 4"/>
+                    </svg>
+                </a>
+            </div>
+        </aside>
+        
+        <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+        
+        <!-- Main Content -->
+        <div class="content-wrapper">
+            <!-- Header -->
+            <header class="header">
+                <div class="header-left">
+                    <button class="burger-menu" onclick="toggleSidebar()" aria-label="Меню" style="display: none;">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                    <div class="search-bar" style="max-width: 400px;">
+                        <svg class="search-bar-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor">
+                            <circle cx="7" cy="7" r="4"/>
+                            <path d="M10 10l3 3"/>
+                        </svg>
+                        <input type="text" placeholder="Поиск пользователей..." id="headerSearch" oninput="filterUsers()">
+                    </div>
+                </div>
+                <div class="header-right">
+                    <button class="btn btn-secondary" onclick="window.location.href='groups.php'" style="padding: 8px 16px; font-size: 14px;">
+                        Группы
+                    </button>
+                    <div style="position: relative;">
+                        <div class="user-avatar" onclick="toggleUserMenu()" title="<?php echo htmlspecialchars($_SESSION['username']); ?>">
+                            <?php echo strtoupper(mb_substr($_SESSION['username'], 0, 1)); ?>
+                        </div>
+                        <!-- User Menu -->
+                        <div class="mobile-menu" id="userMenu" style="display: none; position: absolute; top: calc(100% + 8px); right: 0; background: var(--card-background); border: 1px solid var(--border-color); border-radius: 8px; padding: 8px; min-width: 200px; max-width: 300px; width: auto; z-index: 1000; box-shadow: var(--shadow-lg);">
+                            <div style="padding: 12px; border-bottom: 1px solid var(--border-color);">
+                                <div style="font-weight: 600; color: var(--text-primary);"><?php echo htmlspecialchars($_SESSION['username']); ?></div>
+                                <?php if ($userEmail): ?>
+                                    <div style="font-size: 12px; color: var(--text-secondary); margin-top: 4px;"><?php echo htmlspecialchars($userEmail); ?></div>
+                                <?php endif; ?>
+                            </div>
+                            <a href="logout.php" class="btn btn-secondary" style="width: 100%; margin: 4px 0; text-align: left; padding: 10px 12px; font-size: 14px; box-sizing: border-box;">Выйти</a>
+                        </div>
+                    </div>
+                </div>
+            </header>
 
-        <?php if ($message): ?>
-            <div class="alert alert-success"><?php echo $message; ?></div>
-        <?php endif; ?>
+            <!-- Main Content Area -->
+            <main class="main-content">
+                <?php if ($message): ?>
+                    <div class="alert alert-success"><?php echo $message; ?></div>
+                <?php endif; ?>
 
-        <div class="admin-container">
-            <div class="task-section">
+                <div class="task-section">
                 <h2>Список всех пользователей (<span id="totalUsers"><?php echo count($users); ?></span>)</h2>
                 
                 <div class="search-container">
@@ -517,7 +655,7 @@ foreach ($users as $user) {
                     </tbody>
                 </table>
                 </div>
-            </div>
+            </main>
         </div>
     </div>
 
@@ -538,11 +676,58 @@ foreach ($users as $user) {
     </div>
 
     <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('active');
+        }
+        
+        function toggleUserMenu() {
+            const menu = document.getElementById('userMenu');
+            const avatar = document.querySelector('.user-avatar');
+            
+            if (menu.style.display === 'none' || menu.style.display === '') {
+                menu.style.display = 'block';
+                
+                // Always align right edge of menu with right edge of avatar
+                menu.style.right = '0';
+                menu.style.left = 'auto';
+                
+                // Check if menu goes off screen and adjust if needed
+                setTimeout(() => {
+                    const avatarRect = avatar.getBoundingClientRect();
+                    const menuRect = menu.getBoundingClientRect();
+                    const windowWidth = window.innerWidth;
+                    
+                    if (menuRect.right > windowWidth) {
+                        // If menu goes off screen, shift it left
+                        const overflow = menuRect.right - windowWidth;
+                        menu.style.right = `-${overflow + 10}px`;
+                    }
+                }, 0);
+            } else {
+                menu.style.display = 'none';
+            }
+        }
+        
+        document.addEventListener('click', function(event) {
+            const userMenu = document.getElementById('userMenu');
+            const userAvatar = document.querySelector('.user-avatar');
+            if (userMenu && userAvatar && !userMenu.contains(event.target) && !userAvatar.contains(event.target)) {
+                userMenu.style.display = 'none';
+            }
+        });
+        
+        document.getElementById('sidebarOverlay').addEventListener('click', toggleSidebar);
+        
         function filterUsers() {
-            const usernameFilter = document.getElementById('searchUsername').value.toLowerCase().trim();
-            const emailFilter = document.getElementById('searchEmail').value.toLowerCase().trim();
-            const roleFilter = document.getElementById('searchRole').value;
-            const statusFilter = document.getElementById('searchStatus').value;
+            const headerSearch = document.getElementById('headerSearch');
+            const usernameFilter = (document.getElementById('searchUsername')?.value || '').toLowerCase().trim();
+            const emailFilter = (document.getElementById('searchEmail')?.value || '').toLowerCase().trim();
+            const roleFilter = document.getElementById('searchRole')?.value || '';
+            const statusFilter = document.getElementById('searchStatus')?.value || '';
+            const headerSearchValue = headerSearch ? headerSearch.value.toLowerCase().trim() : '';
             
             const rows = document.querySelectorAll('#usersTableBody tr');
             let visibleCount = 0;
@@ -553,12 +738,13 @@ foreach ($users as $user) {
                 const role = row.getAttribute('data-role') || '';
                 const status = row.getAttribute('data-status') || '';
                 
+                const matchesHeaderSearch = !headerSearchValue || username.includes(headerSearchValue) || email.includes(headerSearchValue);
                 const matchesUsername = !usernameFilter || username.includes(usernameFilter);
                 const matchesEmail = !emailFilter || email.includes(emailFilter);
                 const matchesRole = !roleFilter || role === roleFilter;
                 const matchesStatus = !statusFilter || status === statusFilter;
                 
-                if (matchesUsername && matchesEmail && matchesRole && matchesStatus) {
+                if (matchesHeaderSearch && matchesUsername && matchesEmail && matchesRole && matchesStatus) {
                     row.classList.remove('hidden');
                     visibleCount++;
                 } else {
@@ -701,25 +887,6 @@ foreach ($users as $user) {
                 .replace(/\t/g, '\\t');
         }
 
-        function toggleMobileMenu() {
-            const menu = document.getElementById('mobileMenu');
-            const burger = document.querySelector('.burger-menu');
-            menu.classList.toggle('active');
-            burger.classList.toggle('active');
-        }
-
-        document.addEventListener('click', function(event) {
-            const menu = document.getElementById('mobileMenu');
-            const burger = document.querySelector('.burger-menu');
-            const header = document.querySelector('.header');
-            
-            if (menu && burger && header) {
-                if (!header.contains(event.target) && menu.classList.contains('active')) {
-                    menu.classList.remove('active');
-                    burger.classList.remove('active');
-                }
-            }
-        });
 
         document.getElementById('tasksModal').addEventListener('click', function(event) {
             if (event.target === this) {
