@@ -63,6 +63,60 @@ foreach ($users as $user) {
             display: flex;
             align-items: center;
         }
+        .search-container {
+            margin-bottom: 20px;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        .search-row {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: flex-end;
+        }
+        .search-group {
+            flex: 1;
+            min-width: 200px;
+        }
+        .search-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+            font-weight: 500;
+            font-size: 14px;
+        }
+        .search-group input,
+        .search-group select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 16px;
+            font-family: inherit;
+            transition: border-color 0.3s ease;
+        }
+        .search-group input:focus,
+        .search-group select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+        .search-actions {
+            display: flex;
+            gap: 10px;
+            align-items: flex-end;
+        }
+        .search-results {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+        .users-table tbody tr.hidden {
+            display: none;
+        }
         .table-wrapper {
             width: 100%;
             overflow-x: auto;
@@ -232,6 +286,22 @@ foreach ($users as $user) {
             .admin-nav .btn {
                 width: 100%;
             }
+            .search-container {
+                padding: 15px;
+            }
+            .search-row {
+                flex-direction: column;
+                gap: 15px;
+            }
+            .search-group {
+                min-width: 100%;
+            }
+            .search-actions {
+                width: 100%;
+            }
+            .search-actions .btn {
+                width: 100%;
+            }
             .users-table {
                 min-width: 600px;
                 font-size: 14px;
@@ -349,7 +419,42 @@ foreach ($users as $user) {
 
         <div class="admin-container">
             <div class="task-section">
-                <h2>Список всех пользователей (<?php echo count($users); ?>)</h2>
+                <h2>Список всех пользователей (<span id="totalUsers"><?php echo count($users); ?></span>)</h2>
+                
+                <div class="search-container">
+                    <div class="search-row">
+                        <div class="search-group">
+                            <label for="searchUsername">Поиск по логину</label>
+                            <input type="text" id="searchUsername" placeholder="Введите логин..." oninput="filterUsers()">
+                        </div>
+                        <div class="search-group">
+                            <label for="searchEmail">Поиск по почте</label>
+                            <input type="text" id="searchEmail" placeholder="Введите email..." oninput="filterUsers()">
+                        </div>
+                        <div class="search-group">
+                            <label for="searchRole">Фильтр по роли</label>
+                            <select id="searchRole" onchange="filterUsers()">
+                                <option value="">Все роли</option>
+                                <option value="admin">Администратор</option>
+                                <option value="user">Пользователь</option>
+                            </select>
+                        </div>
+                        <div class="search-group">
+                            <label for="searchStatus">Фильтр по статусу</label>
+                            <select id="searchStatus" onchange="filterUsers()">
+                                <option value="">Все статусы</option>
+                                <option value="active">Активен</option>
+                                <option value="blocked">Заблокирован</option>
+                            </select>
+                        </div>
+                        <div class="search-actions">
+                            <button type="button" class="btn btn-secondary" onclick="clearSearch()">Очистить</button>
+                        </div>
+                    </div>
+                    <div class="search-results">
+                        Найдено: <span id="filteredCount"><?php echo count($users); ?></span> из <span id="totalCount"><?php echo count($users); ?></span>
+                    </div>
+                </div>
                 
                 <div class="table-wrapper">
                     <table class="users-table">
@@ -365,9 +470,12 @@ foreach ($users as $user) {
                             <th>Действия</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="usersTableBody">
                         <?php foreach ($users as $user): ?>
-                            <tr>
+                            <tr data-username="<?php echo htmlspecialchars(strtolower($user['username'])); ?>" 
+                                data-email="<?php echo htmlspecialchars(strtolower($user['email'])); ?>" 
+                                data-role="<?php echo htmlspecialchars($user['role']); ?>" 
+                                data-status="<?php echo $user['is_blocked'] == 1 ? 'blocked' : 'active'; ?>">
                                 <td><?php echo $user['id']; ?></td>
                                 <td><?php echo htmlspecialchars($user['username']); ?></td>
                                 <td><?php echo htmlspecialchars($user['email']); ?></td>
@@ -430,6 +538,45 @@ foreach ($users as $user) {
     </div>
 
     <script>
+        function filterUsers() {
+            const usernameFilter = document.getElementById('searchUsername').value.toLowerCase().trim();
+            const emailFilter = document.getElementById('searchEmail').value.toLowerCase().trim();
+            const roleFilter = document.getElementById('searchRole').value;
+            const statusFilter = document.getElementById('searchStatus').value;
+            
+            const rows = document.querySelectorAll('#usersTableBody tr');
+            let visibleCount = 0;
+            
+            rows.forEach(row => {
+                const username = row.getAttribute('data-username') || '';
+                const email = row.getAttribute('data-email') || '';
+                const role = row.getAttribute('data-role') || '';
+                const status = row.getAttribute('data-status') || '';
+                
+                const matchesUsername = !usernameFilter || username.includes(usernameFilter);
+                const matchesEmail = !emailFilter || email.includes(emailFilter);
+                const matchesRole = !roleFilter || role === roleFilter;
+                const matchesStatus = !statusFilter || status === statusFilter;
+                
+                if (matchesUsername && matchesEmail && matchesRole && matchesStatus) {
+                    row.classList.remove('hidden');
+                    visibleCount++;
+                } else {
+                    row.classList.add('hidden');
+                }
+            });
+            
+            document.getElementById('filteredCount').textContent = visibleCount;
+        }
+        
+        function clearSearch() {
+            document.getElementById('searchUsername').value = '';
+            document.getElementById('searchEmail').value = '';
+            document.getElementById('searchRole').value = '';
+            document.getElementById('searchStatus').value = '';
+            filterUsers();
+        }
+        
         function toggleBlock(userId, currentStatus, username) {
             const action = currentStatus == 1 ? 'разблокировать' : 'заблокировать';
             if (!confirm(`Вы уверены, что хотите ${action} пользователя "${username}"?`)) {
