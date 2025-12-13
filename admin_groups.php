@@ -82,6 +82,9 @@ foreach ($groups as $group) {
             border-left: 4px solid #4a90e2;
             word-wrap: break-word;
             overflow-wrap: break-word;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
         }
         .group-card h3 {
             margin: 0 0 10px 0;
@@ -119,7 +122,8 @@ foreach ($groups as $group) {
         .group-actions {
             display: flex;
             gap: 10px;
-            margin-top: 15px;
+            margin-top: auto;
+            padding-top: 15px;
             flex-wrap: wrap;
         }
         .group-actions .btn {
