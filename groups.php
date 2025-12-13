@@ -460,21 +460,22 @@ if (isset($_GET['message'])) {
             if (menu.style.display === 'none' || menu.style.display === '') {
                 menu.style.display = 'block';
                 
- 
-                const avatarRect = avatar.getBoundingClientRect();
-                const menuRect = menu.getBoundingClientRect();
-                const windowWidth = window.innerWidth;
+                // Always align right edge of menu with right edge of avatar
+                menu.style.right = '0';
+                menu.style.left = 'auto';
                 
-
-                if (avatarRect.right + menuRect.width > windowWidth) {
-
-                    menu.style.right = 'auto';
-                    menu.style.left = '0';
-                } else {
-
-                    menu.style.right = '0';
-                    menu.style.left = 'auto';
-                }
+                // Check if menu goes off screen and adjust if needed
+                setTimeout(() => {
+                    const avatarRect = avatar.getBoundingClientRect();
+                    const menuRect = menu.getBoundingClientRect();
+                    const windowWidth = window.innerWidth;
+                    
+                    if (menuRect.right > windowWidth) {
+                        // If menu goes off screen, shift it left
+                        const overflow = menuRect.right - windowWidth;
+                        menu.style.right = `-${overflow + 10}px`;
+                    }
+                }, 0);
             } else {
                 menu.style.display = 'none';
             }
