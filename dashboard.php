@@ -90,11 +90,6 @@ if (isset($_GET['message'])) {
             <div class="sidebar-section">
                 <div class="sidebar-section-header">
                     <h3>ГРУППЫ</h3>
-                    <button onclick="window.location.href='groups.php'" title="Управление группами">
-                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor">
-                            <path d="M8 4v8M4 8h8"/>
-                        </svg>
-                    </button>
                 </div>
                 <a href="dashboard.php" class="sidebar-item active">
                     <span class="sidebar-item-text">Все заметки</span>
