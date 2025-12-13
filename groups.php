@@ -9,7 +9,6 @@ if (!$pdo) {
 
 $user_id = getCurrentUserId();
 
-// Get user email
 $stmt = $pdo->prepare("SELECT email FROM users WHERE id = ?");
 $stmt->execute([$user_id]);
 $userEmail = $stmt->fetchColumn();
@@ -470,18 +469,15 @@ if (isset($_GET['message'])) {
             if (menu.style.display === 'none' || menu.style.display === '') {
                 menu.style.display = 'block';
                 
-                // Always align right edge of menu with right edge of avatar
                 menu.style.right = '0';
                 menu.style.left = 'auto';
                 
-                // Check if menu goes off screen and adjust if needed
                 setTimeout(() => {
                     const avatarRect = avatar.getBoundingClientRect();
                     const menuRect = menu.getBoundingClientRect();
                     const windowWidth = window.innerWidth;
                     
                     if (menuRect.right > windowWidth) {
-                        // If menu goes off screen, shift it left
                         const overflow = menuRect.right - windowWidth;
                         menu.style.right = `-${overflow + 10}px`;
                     }
@@ -492,7 +488,6 @@ if (isset($_GET['message'])) {
         }
         
         function filterGroups() {
-            // Function kept for compatibility, but search is removed from header
             const cards = document.querySelectorAll('.group-card');
             cards.forEach(card => {
                 card.style.display = '';
@@ -506,7 +501,6 @@ if (isset($_GET['message'])) {
                 userMenu.style.display = 'none';
             }
             
-            // Close sidebar when clicking outside on mobile
             const sidebar = document.getElementById('sidebar');
             const sidebarOverlay = document.getElementById('sidebarOverlay');
             const burger = document.querySelector('.burger-menu');
