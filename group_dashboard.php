@@ -160,11 +160,11 @@ if (isset($_GET['message'])) {
                 </div>
                 <div class="sidebar-item" onclick="filterByPriority(2)">
                     <div class="sidebar-item-icon priority-icon medium">i</div>
-                    <span class="sidebar-item-text">Средняя</span>
+                    <span class="sidebar-item-text">Средней важности</span>
                 </div>
                 <div class="sidebar-item" onclick="filterByPriority(3)">
                     <div class="sidebar-item-icon priority-icon low">—</div>
-                    <span class="sidebar-item-text">Низкая</span>
+                    <span class="sidebar-item-text">По мере возможности</span>
                 </div>
             </div>
         </aside>
@@ -397,11 +397,11 @@ if (isset($_GET['message'])) {
                         </div>
                         <div class="priority-option selected" data-priority="2" onclick="selectPriority(2)">
                             <div class="priority-option-icon medium">i</div>
-                            <span class="priority-option-label">Средняя</span>
+                            <span class="priority-option-label">Средней важности</span>
                         </div>
                         <div class="priority-option" data-priority="3" onclick="selectPriority(3)">
                             <div class="priority-option-icon low">—</div>
-                            <span class="priority-option-label">Низкая</span>
+                            <span class="priority-option-label">По мере возможности</span>
                         </div>
                     </div>
                     <input type="hidden" id="taskPriority" name="priority" value="2" required>
