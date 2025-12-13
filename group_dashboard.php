@@ -200,13 +200,13 @@ if (isset($_GET['message'])) {
                         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" style="display: inline-block; vertical-align: middle; margin-right: 6px;">
                             <path d="M12 4v8M4 4v8M2 2h12v12H2z"/>
                         </svg>
-                        Группы
+                        <span class="btn-text">Группы</span>
                     </button>
                     <button class="btn btn-primary" onclick="openTaskModal()" style="padding: 10px 20px; font-size: 14px;">
                         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" style="display: inline-block; vertical-align: middle; margin-right: 6px;">
                             <path d="M8 4v8M4 8h8"/>
                         </svg>
-                        Создать
+                        <span class="btn-text">Создать</span>
                     </button>
                     <div style="position: relative;">
                         <div class="user-avatar" onclick="toggleUserMenu()" title="<?php echo htmlspecialchars($_SESSION['username']); ?>">

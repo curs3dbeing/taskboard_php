@@ -296,11 +296,17 @@ if (isset($_GET['message'])) {
                 </div>
                 <div class="header-right">
                     <button class="btn btn-secondary" onclick="window.location.href='dashboard.php'" style="padding: 8px 16px; font-size: 14px;">
-                        Мои задачи
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" style="display: inline-block; vertical-align: middle; margin-right: 6px;">
+                            <path d="M2 4h12M2 8h12M2 12h12"/>
+                        </svg>
+                        <span class="btn-text">Мои задачи</span>
                     </button>
                     <?php if (isAdmin()): ?>
                         <button class="btn btn-secondary" onclick="window.location.href='admin_users.php'" style="padding: 8px 16px; font-size: 14px;">
-                            Админ-панель
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" style="display: inline-block; vertical-align: middle; margin-right: 6px;">
+                                <path d="M8 2v12M2 8h12"/>
+                            </svg>
+                            <span class="btn-text">Админ-панель</span>
                         </button>
                     <?php endif; ?>
                     <div style="position: relative;">

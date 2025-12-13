@@ -745,7 +745,7 @@ $userGroups = $stmt->fetchAll();
                 </div>
                 <div class="header-right">
                     <button class="btn btn-secondary" onclick="window.location.href='groups.php'" style="padding: 8px 16px; font-size: 14px;">
-                        Группы
+                        <span class="btn-text">Группы</span>
                     </button>
                     <div style="position: relative;">
                         <div class="user-avatar" onclick="toggleUserMenu()" title="<?php echo htmlspecialchars($_SESSION['username']); ?>">

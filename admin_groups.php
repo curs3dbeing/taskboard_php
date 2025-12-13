@@ -273,32 +273,47 @@ $userGroups = $stmt->fetchAll();
             
             .header {
                 padding: 8px 10px;
-                flex-wrap: wrap;
+                flex-direction: column;
                 gap: 8px;
+                align-items: stretch;
             }
             
             .header-left {
-                flex: 1;
-                min-width: 0;
-                order: 2;
+                width: 100%;
+                order: 1;
+                display: flex;
+                align-items: center;
+                gap: 8px;
             }
             
             .search-bar {
                 max-width: 100%;
-                order: 3;
-                width: 100%;
+                flex: 1;
+                min-width: 0;
             }
             
             .header-right {
-                order: 1;
+                order: 2;
                 width: 100%;
+                display: flex;
+                align-items: center;
                 justify-content: space-between;
                 gap: 6px;
+                flex-wrap: nowrap;
             }
             
             .header-right .btn {
                 padding: 6px 10px;
                 font-size: 11px;
+                flex-shrink: 0;
+            }
+            
+            .header-right .btn-text {
+                display: none;
+            }
+            
+            .header-right .btn svg {
+                margin-right: 0;
             }
         }
         
@@ -360,11 +375,37 @@ $userGroups = $stmt->fetchAll();
             
             .header {
                 padding: 6px 8px;
+                gap: 6px;
+            }
+            
+            .header-left {
+                gap: 6px;
+            }
+            
+            .search-bar input {
+                font-size: 11px;
+                padding: 5px 8px 5px 28px;
+            }
+            
+            .search-bar-icon {
+                width: 12px;
+                height: 12px;
+                left: 8px;
+            }
+            
+            .header-right {
+                gap: 4px;
             }
             
             .header-right .btn {
                 padding: 4px 6px;
                 font-size: 9px;
+                min-width: 32px;
+            }
+            
+            .header-right .btn svg {
+                width: 12px;
+                height: 12px;
             }
             
             .user-avatar {
@@ -467,7 +508,10 @@ $userGroups = $stmt->fetchAll();
                 </div>
                 <div class="header-right">
                     <button class="btn btn-secondary" onclick="window.location.href='groups.php'" style="padding: 8px 16px; font-size: 14px;">
-                        Группы
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" style="display: inline-block; vertical-align: middle; margin-right: 6px;">
+                            <path d="M12 4v8M4 4v8M2 2h12v12H2z"/>
+                        </svg>
+                        <span class="btn-text">Группы</span>
                     </button>
                     <div style="position: relative;">
                         <div class="user-avatar" onclick="toggleUserMenu()" title="<?php echo htmlspecialchars($_SESSION['username']); ?>">
