@@ -620,6 +620,7 @@ foreach ($users as $user) {
                         } else {
                             let html = '';
                             data.tasks.forEach(task => {
+                                const taskNameEscaped = escapeJsString(task.name);
                                 html += `
                                     <div class="task-item">
                                         <div>
@@ -629,7 +630,7 @@ foreach ($users as $user) {
                                             ${task.completed == 1 ? 'Выполнена' : 'Активна'} | 
                                             Создана: ${task.created_at}</small>
                                         </div>
-                                        <button class="btn btn-danger btn-small" onclick="deleteUserTask(${task.id}, ${userId}, ${JSON.stringify(task.name)})">Удалить</button>
+                                        <button class="btn btn-danger btn-small" onclick="deleteUserTask(${task.id}, ${userId}, '${taskNameEscaped}')">Удалить</button>
                                     </div>
                                 `;
                             });
@@ -687,6 +688,17 @@ foreach ($users as $user) {
             const div = document.createElement('div');
             div.textContent = text;
             return div.innerHTML;
+        }
+        
+        function escapeJsString(str) {
+            if (!str) return '';
+            return str.toString()
+                .replace(/\\/g, '\\\\')
+                .replace(/'/g, "\\'")
+                .replace(/"/g, '\\"')
+                .replace(/\n/g, '\\n')
+                .replace(/\r/g, '\\r')
+                .replace(/\t/g, '\\t');
         }
 
         function toggleMobileMenu() {
