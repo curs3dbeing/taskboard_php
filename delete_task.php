@@ -27,18 +27,30 @@ try {
     }
     
 
-    if ($task['user_id'] != $user_id) {
+    // Администраторы могут удалять любые задачи, обычные пользователи - только свои
+    if ($task['user_id'] != $user_id && !isAdmin()) {
         $redirect = $task['group_id'] ? "group_dashboard.php?group_id={$task['group_id']}" : 'dashboard.php';
         header('Location: ' . $redirect . '?message=' . urlencode('У вас нет прав для удаления этой задачи.'));
         exit;
     }
     
-    if ($task['group_id']) {
-        $stmt = $pdo->prepare("DELETE FROM tasks WHERE id = ? AND user_id = ? AND group_id = ?");
-        $stmt->execute([$task_id, $user_id, $task['group_id']]);
+    // Администраторы могут удалять любые задачи без проверки user_id
+    if (isAdmin()) {
+        if ($task['group_id']) {
+            $stmt = $pdo->prepare("DELETE FROM tasks WHERE id = ? AND group_id = ?");
+            $stmt->execute([$task_id, $task['group_id']]);
+        } else {
+            $stmt = $pdo->prepare("DELETE FROM tasks WHERE id = ? AND group_id IS NULL");
+            $stmt->execute([$task_id]);
+        }
     } else {
-        $stmt = $pdo->prepare("DELETE FROM tasks WHERE id = ? AND user_id = ? AND group_id IS NULL");
-        $stmt->execute([$task_id, $user_id]);
+        if ($task['group_id']) {
+            $stmt = $pdo->prepare("DELETE FROM tasks WHERE id = ? AND user_id = ? AND group_id = ?");
+            $stmt->execute([$task_id, $user_id, $task['group_id']]);
+        } else {
+            $stmt = $pdo->prepare("DELETE FROM tasks WHERE id = ? AND user_id = ? AND group_id IS NULL");
+            $stmt->execute([$task_id, $user_id]);
+        }
     }
     
     if ($stmt->rowCount() > 0) {

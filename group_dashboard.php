@@ -29,7 +29,6 @@ if (!$group) {
     exit;
 }
 
-// Администраторы имеют доступ ко всем группам
 if (!$group['is_owner'] && !$group['is_member'] && !isAdmin()) {
     header('Location: groups.php?message=' . urlencode('У вас нет доступа к этой группе.'));
     exit;
@@ -184,12 +183,14 @@ if (isset($_GET['message'])) {
                                                 <path d="M13 4L6 11L3 8"/>
                                             </svg>
                                         </button>
-                                        <?php if ($task['user_id'] == $user_id): ?>
-                                            <button class="btn-icon" onclick="editTask(<?php echo $task['id']; ?>, '<?php echo htmlspecialchars(addslashes($task['name'])); ?>', '<?php echo htmlspecialchars(addslashes($task['description'] ?? '')); ?>', <?php echo $task['priority']; ?>)" title="Редактировать">
-                                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor">
-                                                    <path d="M11.5 2.5a2.121 2.121 0 0 1 3 3L6.5 13.5l-4 1 1-4L11.5 2.5z"/>
-                                                </svg>
-                                            </button>
+                                        <?php if ($task['user_id'] == $user_id || isAdmin()): ?>
+                                            <?php if ($task['user_id'] == $user_id): ?>
+                                                <button class="btn-icon" onclick="editTask(<?php echo $task['id']; ?>, '<?php echo htmlspecialchars(addslashes($task['name'])); ?>', '<?php echo htmlspecialchars(addslashes($task['description'] ?? '')); ?>', <?php echo $task['priority']; ?>)" title="Редактировать">
+                                                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor">
+                                                        <path d="M11.5 2.5a2.121 2.121 0 0 1 3 3L6.5 13.5l-4 1 1-4L11.5 2.5z"/>
+                                                    </svg>
+                                                </button>
+                                            <?php endif; ?>
                                             <button class="btn-icon" onclick="deleteTask(<?php echo $task['id']; ?>)" title="Удалить">
                                                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor">
                                                     <path d="M3 6h10M6 6v6m4-6v6M5 6l1-3h4l1 3M5 6h6"/>
@@ -231,7 +232,7 @@ if (isset($_GET['message'])) {
                                                 <path d="M11 5L8 8L5 5M8 11V8"/>
                                             </svg>
                                         </button>
-                                        <?php if ($task['user_id'] == $user_id): ?>
+                                        <?php if ($task['user_id'] == $user_id || isAdmin()): ?>
                                             <button class="btn-icon" onclick="deleteTask(<?php echo $task['id']; ?>)" title="Удалить">
                                                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor">
                                                     <path d="M3 6h10M6 6v6m4-6v6M5 6l1-3h4l1 3M5 6h6"/>
