@@ -1207,7 +1207,7 @@ body:not(.main-layout) .container {
         flex: 1;
         min-width: 0;
         max-width: none;
-        margin: 0 8px;
+        margin: 0 0 0 8px;
     }
     
     .search-bar input {
@@ -1350,7 +1350,7 @@ body:not(.main-layout) .container {
         flex: 1;
         min-width: 0;
         max-width: none;
-        margin: 0 6px;
+        margin: 0 0 0 6px;
     }
     
     .search-bar input {
