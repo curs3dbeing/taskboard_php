@@ -273,47 +273,46 @@ $userGroups = $stmt->fetchAll();
             
             .header {
                 padding: 8px 10px;
-                flex-direction: column;
+                flex-direction: row;
                 gap: 8px;
-                align-items: stretch;
+                align-items: center;
             }
             
             .header-left {
-                width: 100%;
-                order: 1;
                 display: flex;
                 align-items: center;
-                gap: 8px;
-            }
-            
-            .search-bar {
-                max-width: 100%;
-                flex: 1;
-                min-width: 0;
-            }
-            
-            .header-right {
-                order: 2;
-                width: 100%;
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                gap: 6px;
-                flex-wrap: nowrap;
-            }
-            
-            .header-right .btn {
-                padding: 6px 10px;
-                font-size: 11px;
+                gap: 0;
                 flex-shrink: 0;
             }
             
-            .header-right .btn-text {
-                display: inline;
+            .header-left .burger-menu {
+                display: flex !important;
             }
             
-            .header-right .btn svg {
-                margin-right: 4px;
+            .search-bar {
+                display: block;
+                flex: 1;
+                min-width: 0;
+                max-width: none;
+                margin: 0 0 0 8px;
+            }
+            
+            .search-bar input {
+                padding: 8px 12px 8px 36px;
+                font-size: 13px;
+            }
+            
+            .search-bar-icon {
+                width: 16px;
+                height: 16px;
+                left: 10px;
+            }
+            
+            .header-right {
+                display: flex;
+                align-items: center;
+                gap: 0;
+                flex-shrink: 0;
             }
         }
         
@@ -379,33 +378,26 @@ $userGroups = $stmt->fetchAll();
             }
             
             .header-left {
-                gap: 6px;
+                gap: 0;
+            }
+            
+            .search-bar {
+                margin: 0 0 0 6px;
             }
             
             .search-bar input {
-                font-size: 11px;
-                padding: 5px 8px 5px 28px;
+                padding: 6px 10px 6px 32px;
+                font-size: 12px;
             }
             
             .search-bar-icon {
-                width: 12px;
-                height: 12px;
+                width: 14px;
+                height: 14px;
                 left: 8px;
             }
             
             .header-right {
-                gap: 4px;
-            }
-            
-            .header-right .btn {
-                padding: 4px 6px;
-                font-size: 9px;
-                min-width: 32px;
-            }
-            
-            .header-right .btn svg {
-                width: 12px;
-                height: 12px;
+                gap: 0;
             }
             
             .user-avatar {

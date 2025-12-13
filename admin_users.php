@@ -460,32 +460,46 @@ $userGroups = $stmt->fetchAll();
             
             .header {
                 padding: 8px 10px;
-                flex-wrap: wrap;
+                flex-direction: row;
                 gap: 8px;
+                align-items: center;
             }
             
             .header-left {
-                flex: 1;
-                min-width: 0;
-                order: 2;
+                display: flex;
+                align-items: center;
+                gap: 0;
+                flex-shrink: 0;
+            }
+            
+            .header-left .burger-menu {
+                display: flex !important;
             }
             
             .search-bar {
-                max-width: 100%;
-                order: 3;
-                width: 100%;
+                display: block;
+                flex: 1;
+                min-width: 0;
+                max-width: none;
+                margin: 0 0 0 8px;
+            }
+            
+            .search-bar input {
+                padding: 8px 12px 8px 36px;
+                font-size: 13px;
+            }
+            
+            .search-bar-icon {
+                width: 16px;
+                height: 16px;
+                left: 10px;
             }
             
             .header-right {
-                order: 1;
-                width: 100%;
-                justify-content: space-between;
-                gap: 6px;
-            }
-            
-            .header-right .btn {
-                padding: 6px 10px;
-                font-size: 11px;
+                display: flex;
+                align-items: center;
+                gap: 0;
+                flex-shrink: 0;
             }
             
             .badge {
@@ -603,11 +617,30 @@ $userGroups = $stmt->fetchAll();
             
             .header {
                 padding: 6px 8px;
+                gap: 6px;
             }
             
-            .header-right .btn {
-                padding: 4px 6px;
-                font-size: 9px;
+            .header-left {
+                gap: 0;
+            }
+            
+            .search-bar {
+                margin: 0 0 0 6px;
+            }
+            
+            .search-bar input {
+                padding: 6px 10px 6px 32px;
+                font-size: 12px;
+            }
+            
+            .search-bar-icon {
+                width: 14px;
+                height: 14px;
+                left: 8px;
+            }
+            
+            .header-right {
+                gap: 0;
             }
             
             .user-avatar {
