@@ -75,11 +75,17 @@ if (isset($_GET['message'])) {
             </button>
             <div class="user-info">
                 <a href="groups.php" class="btn btn-secondary">Группы</a>
+                <?php if (isAdmin()): ?>
+                    <a href="admin_users.php" class="btn btn-secondary">Админ-панель</a>
+                <?php endif; ?>
                 <span>Здравствуйте, <?php echo htmlspecialchars($_SESSION['username']); ?>!</span>
                 <a href="logout.php" class="btn btn-secondary">Выйти</a>
             </div>
             <div class="mobile-menu" id="mobileMenu">
                 <a href="groups.php" class="btn btn-secondary">Группы</a>
+                <?php if (isAdmin()): ?>
+                    <a href="admin_users.php" class="btn btn-secondary">Админ-панель</a>
+                <?php endif; ?>
                 <span>Здравствуйте, <?php echo htmlspecialchars($_SESSION['username']); ?>!</span>
                 <a href="logout.php" class="btn btn-secondary">Выйти</a>
             </div>

@@ -80,6 +80,62 @@ function requireLogin() {
     }
 }
 
+// Проверка роли пользователя
+function getUserRole() {
+    if (!isLoggedIn()) {
+        return null;
+    }
+    
+    // Сначала проверяем сессию для оптимизации
+    if (isset($_SESSION['role'])) {
+        return $_SESSION['role'];
+    }
+    
+    // Если в сессии нет, получаем из базы данных
+    $pdo = getDBConnection();
+    if (!$pdo) {
+        return 'user';
+    }
+    
+    $user_id = getCurrentUserId();
+    $stmt = $pdo->prepare("SELECT role FROM users WHERE id = ?");
+    $stmt->execute([$user_id]);
+    $result = $stmt->fetch();
+    
+    $role = $result ? $result['role'] : 'user';
+    $_SESSION['role'] = $role; // Сохраняем в сессию для следующих запросов
+    
+    return $role;
+}
+
+// Проверка, является ли пользователь администратором
+function isAdmin() {
+    return getUserRole() === 'admin';
+}
+
+// Требование прав администратора
+function requireAdmin() {
+    requireLogin();
+    if (!isAdmin()) {
+        header('Location: dashboard.php?message=' . urlencode('У вас нет прав доступа к этой странице.'));
+        exit;
+    }
+}
+
+// Проверка, заблокирован ли пользователь
+function isUserBlocked($user_id) {
+    $pdo = getDBConnection();
+    if (!$pdo) {
+        return false;
+    }
+    
+    $stmt = $pdo->prepare("SELECT is_blocked FROM users WHERE id = ?");
+    $stmt->execute([$user_id]);
+    $result = $stmt->fetch();
+    
+    return $result && $result['is_blocked'] == 1;
+}
+
 
 function isValidEmail($email) {
     return filter_var($email, FILTER_VALIDATE_EMAIL) !== false;

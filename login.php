@@ -23,15 +23,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $isEmail = isValidEmail($username);
             $field = $isEmail ? 'email' : 'username';
             
-            $stmt = $pdo->prepare("SELECT id, username, password_hash FROM users WHERE $field = ?");
+            $stmt = $pdo->prepare("SELECT id, username, password_hash, is_blocked, role FROM users WHERE $field = ?");
             $stmt->execute([$username]);
             $user = $stmt->fetch();
             
             if ($user && password_verify($password, $user['password_hash'])) {
-                $_SESSION['user_id'] = $user['id'];
-                $_SESSION['username'] = $user['username'];
-                header('Location: dashboard.php');
-                exit;
+                // Проверяем, не заблокирован ли пользователь
+                if ($user['is_blocked'] == 1) {
+                    $error = 'Ваш аккаунт заблокирован администратором. Обратитесь к администратору для разблокировки.';
+                } else {
+                    $_SESSION['user_id'] = $user['id'];
+                    $_SESSION['username'] = $user['username'];
+                    $_SESSION['role'] = $user['role'] ?? 'user';
+                    header('Location: dashboard.php');
+                    exit;
+                }
             } else {
                 $error = 'Неверный логин/почта или пароль.';
             }
