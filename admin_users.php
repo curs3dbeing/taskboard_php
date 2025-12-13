@@ -363,15 +363,21 @@ $userGroups = $stmt->fetchAll();
         
         @media (max-width: 768px) {
             .main-content {
-                padding: 16px;
+                padding: 12px;
             }
             
             .task-section {
                 padding: 0;
             }
             
+            .task-section h2 {
+                font-size: 20px;
+                margin-bottom: 16px;
+            }
+            
             .search-container {
                 padding: 16px;
+                margin-bottom: 16px;
             }
             
             .search-row {
@@ -383,6 +389,17 @@ $userGroups = $stmt->fetchAll();
                 min-width: 100%;
             }
             
+            .search-group label {
+                font-size: 13px;
+                margin-bottom: 6px;
+            }
+            
+            .search-group input,
+            .search-group select {
+                padding: 8px 12px;
+                font-size: 14px;
+            }
+            
             .search-actions {
                 width: 100%;
             }
@@ -391,89 +408,184 @@ $userGroups = $stmt->fetchAll();
                 width: 100%;
             }
             
-            .users-table {
-                min-width: 600px;
+            .search-results {
                 font-size: 12px;
+                margin-top: 12px;
+                padding-top: 12px;
+            }
+            
+            .table-wrapper {
+                margin: 0 -12px;
+                padding: 0 12px;
+            }
+            
+            .users-table {
+                min-width: 700px;
+                font-size: 11px;
             }
             
             .users-table th,
             .users-table td {
-                padding: 8px 6px;
-                font-size: 11px;
+                padding: 8px 4px;
+                font-size: 10px;
+            }
+            
+            .users-table th {
+                font-size: 9px;
+                padding: 6px 4px;
             }
             
             .action-buttons {
                 flex-direction: column;
                 width: 100%;
-                min-width: 120px;
+                min-width: 100px;
+                gap: 6px;
             }
             
             .action-buttons .btn {
                 width: 100%;
-                font-size: 12px;
-                padding: 6px 10px;
+                font-size: 11px;
+                padding: 6px 8px;
             }
             
             .header {
-                padding: 12px 16px;
+                padding: 10px 12px;
                 flex-wrap: wrap;
+                gap: 10px;
             }
             
             .header-left {
                 flex: 1;
                 min-width: 0;
+                order: 2;
             }
             
             .search-bar {
                 max-width: 100%;
+                order: 3;
+                width: 100%;
             }
             
             .header-right {
+                order: 1;
+                width: 100%;
+                justify-content: space-between;
                 gap: 8px;
             }
             
             .header-right .btn {
-                padding: 6px 12px;
-                font-size: 12px;
+                padding: 6px 10px;
+                font-size: 11px;
             }
+            
             .badge {
-                font-size: 10px;
-                padding: 3px 8px;
+                font-size: 9px;
+                padding: 2px 6px;
             }
+            
             .task-item {
                 flex-direction: column;
                 align-items: flex-start;
             }
+            
             .task-item > div {
                 width: 100%;
             }
+            
             .task-item button {
                 width: 100%;
+                margin-top: 8px;
             }
+            
             #tasksModal .modal-content {
                 max-width: 95%;
                 margin: 10px;
             }
+            
             #tasksModalBody {
                 padding: 15px !important;
             }
         }
         
         @media (max-width: 480px) {
+            .main-content {
+                padding: 8px;
+            }
+            
+            .task-section h2 {
+                font-size: 18px;
+                margin-bottom: 12px;
+            }
+            
+            .search-container {
+                padding: 12px;
+                margin-bottom: 12px;
+            }
+            
+            .search-group label {
+                font-size: 12px;
+            }
+            
+            .search-group input,
+            .search-group select {
+                padding: 8px 10px;
+                font-size: 13px;
+            }
+            
+            .table-wrapper {
+                margin: 0 -8px;
+                padding: 0 8px;
+            }
+            
             .users-table {
-                min-width: 500px;
-                font-size: 11px;
+                min-width: 650px;
+                font-size: 10px;
             }
             
             .users-table th,
             .users-table td {
-                padding: 6px 4px;
-                font-size: 10px;
+                padding: 6px 3px;
+                font-size: 9px;
+            }
+            
+            .users-table th {
+                font-size: 8px;
+                padding: 5px 3px;
             }
             
             .btn-small {
-                padding: 6px 10px;
-                font-size: 11px;
+                padding: 5px 8px;
+                font-size: 10px;
+            }
+            
+            .action-buttons {
+                min-width: 90px;
+                gap: 4px;
+            }
+            
+            .action-buttons .btn {
+                font-size: 10px;
+                padding: 5px 6px;
+            }
+            
+            .badge {
+                font-size: 8px;
+                padding: 2px 4px;
+            }
+            
+            .header {
+                padding: 8px 10px;
+            }
+            
+            .header-right .btn {
+                padding: 5px 8px;
+                font-size: 10px;
+            }
+            
+            .user-avatar {
+                width: 32px;
+                height: 32px;
+                font-size: 14px;
             }
             
             #tasksModal .modal-content {
@@ -488,6 +600,7 @@ $userGroups = $stmt->fetchAll();
             .task-item {
                 flex-direction: column;
                 align-items: stretch;
+                padding: 10px;
             }
             
             .task-item > div {
@@ -497,7 +610,7 @@ $userGroups = $stmt->fetchAll();
             
             .task-item button {
                 width: 100%;
-                margin-top: 10px;
+                margin-top: 8px;
             }
         }
     </style>

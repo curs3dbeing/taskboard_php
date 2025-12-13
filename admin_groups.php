@@ -200,11 +200,16 @@ $userGroups = $stmt->fetchAll();
         
         @media (max-width: 768px) {
             .main-content {
-                padding: 16px;
+                padding: 12px;
             }
             
             .task-section {
                 padding: 0;
+            }
+            
+            .task-section h2 {
+                font-size: 20px;
+                margin-bottom: 16px;
             }
             
             .groups-grid {
@@ -212,10 +217,51 @@ $userGroups = $stmt->fetchAll();
                 gap: 16px;
             }
             
+            .group-card {
+                padding: 16px;
+            }
+            
+            .group-card h3 {
+                font-size: 17px;
+            }
+            
+            .group-card p {
+                font-size: 13px;
+            }
+            
+            .group-meta {
+                font-size: 11px;
+                margin-top: 12px;
+                padding-top: 12px;
+            }
+            
+            .group-meta-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 4px;
+            }
+            
+            .group-meta-item span:last-child {
+                text-align: left;
+            }
+            
+            .group-actions {
+                flex-direction: column;
+                gap: 8px;
+                margin-top: 12px;
+                padding-top: 12px;
+            }
+            
+            .group-actions .btn {
+                width: 100%;
+                font-size: 12px;
+                padding: 8px 12px;
+            }
+            
             .header {
-                padding: 12px 16px;
+                padding: 10px 12px;
                 flex-wrap: wrap;
-                gap: 12px;
+                gap: 10px;
             }
             
             .header-left {
@@ -234,53 +280,83 @@ $userGroups = $stmt->fetchAll();
                 order: 1;
                 width: 100%;
                 justify-content: space-between;
+                gap: 8px;
             }
             
             .header-right .btn {
-                padding: 6px 12px;
-                font-size: 12px;
-            }
-            .groups-grid {
-                grid-template-columns: 1fr;
-                gap: 15px;
-            }
-            .group-card {
-                padding: 15px;
-            }
-            .group-meta-item {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            .group-meta-item span:last-child {
-                text-align: left;
-            }
-            .group-actions {
-                flex-direction: column;
-            }
-            .group-actions .btn {
-                width: 100%;
+                padding: 6px 10px;
+                font-size: 11px;
             }
         }
         
         @media (max-width: 480px) {
+            .main-content {
+                padding: 8px;
+            }
+            
+            .task-section h2 {
+                font-size: 18px;
+                margin-bottom: 12px;
+            }
+            
             .groups-grid {
-                gap: 10px;
+                gap: 12px;
             }
+            
             .group-card {
-                padding: 12px;
+                padding: 14px;
             }
+            
             .group-card h3 {
                 font-size: 16px;
+                margin-bottom: 8px;
             }
+            
             .group-card p {
                 font-size: 12px;
+                margin: 8px 0;
             }
+            
             .group-meta {
+                font-size: 10px;
+                margin-top: 10px;
+                padding-top: 10px;
+                gap: 6px;
+            }
+            
+            .group-meta-item {
+                gap: 3px;
+            }
+            
+            .group-actions {
+                gap: 6px;
+                margin-top: 10px;
+                padding-top: 10px;
+            }
+            
+            .group-actions .btn {
+                font-size: 11px;
+                padding: 6px 10px;
+            }
+            
+            .btn-small {
+                padding: 6px 10px;
                 font-size: 11px;
             }
-            .btn-small {
+            
+            .header {
+                padding: 8px 10px;
+            }
+            
+            .header-right .btn {
                 padding: 5px 8px;
-                font-size: 12px;
+                font-size: 10px;
+            }
+            
+            .user-avatar {
+                width: 32px;
+                height: 32px;
+                font-size: 14px;
             }
         }
         
