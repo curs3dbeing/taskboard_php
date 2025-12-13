@@ -512,7 +512,29 @@ if (isset($_GET['message'])) {
         
         function toggleUserMenu() {
             const menu = document.getElementById('userMenu');
-            menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+            const avatar = document.querySelector('.user-avatar');
+            
+            if (menu.style.display === 'none' || menu.style.display === '') {
+                menu.style.display = 'block';
+                
+
+                const avatarRect = avatar.getBoundingClientRect();
+                const menuRect = menu.getBoundingClientRect();
+                const windowWidth = window.innerWidth;
+                
+
+                if (avatarRect.right + menuRect.width > windowWidth) {
+
+                    menu.style.right = 'auto';
+                    menu.style.left = '0';
+                } else {
+
+                    menu.style.right = '0';
+                    menu.style.left = 'auto';
+                }
+            } else {
+                menu.style.display = 'none';
+            }
         }
         
         document.addEventListener('click', function(event) {
@@ -598,7 +620,7 @@ if (isset($_GET['message'])) {
             burger.classList.toggle('active');
         }
 
-        // Закрытие меню при клике вне его
+
         document.addEventListener('click', function(event) {
             const menu = document.getElementById('mobileMenu');
             const burger = document.querySelector('.burger-menu');
@@ -612,7 +634,7 @@ if (isset($_GET['message'])) {
             }
         });
 
-        // Защита от двойной отправки формы задачи
+
         const taskForm = document.getElementById('taskForm');
         if (taskForm) {
             taskForm.addEventListener('submit', function(e) {

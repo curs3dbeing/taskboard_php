@@ -9,7 +9,6 @@ if (!$pdo) {
 
 $user_id = getCurrentUserId();
 
-// Get user email
 $stmt = $pdo->prepare("SELECT email FROM users WHERE id = ?");
 $stmt->execute([$user_id]);
 $userEmail = $stmt->fetchColumn();
@@ -426,10 +425,28 @@ if (isset($_GET['message'])) {
         
         function toggleUserMenu() {
             const menu = document.getElementById('userMenu');
-            menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+            const avatar = document.querySelector('.user-avatar');
+            
+            if (menu.style.display === 'none' || menu.style.display === '') {
+                menu.style.display = 'block';
+                
+                const avatarRect = avatar.getBoundingClientRect();
+                const menuRect = menu.getBoundingClientRect();
+                const windowWidth = window.innerWidth;
+                
+                if (avatarRect.right + menuRect.width > windowWidth) {
+                    menu.style.right = 'auto';
+                    menu.style.left = '0';
+                } else {
+                    menu.style.right = '0';
+                    menu.style.left = 'auto';
+                }
+            } else {
+                menu.style.display = 'none';
+            }
         }
         
-        // Close user menu when clicking outside
+
         document.addEventListener('click', function(event) {
             const userMenu = document.getElementById('userMenu');
             const userAvatar = document.querySelector('.user-avatar');
@@ -438,7 +455,7 @@ if (isset($_GET['message'])) {
             }
         });
         
-        // Close sidebar overlay on click
+
         document.getElementById('sidebarOverlay').addEventListener('click', toggleSidebar);
     </script>
     <script src="script.js"></script>
