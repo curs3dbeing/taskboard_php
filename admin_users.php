@@ -137,19 +137,43 @@ foreach ($users as $user) {
         .modal.show {
             display: flex;
         }
+        #tasksModal .modal-content {
+            max-width: 90%;
+            width: 100%;
+            max-width: 600px;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            box-sizing: border-box;
+        }
+        #tasksModalBody {
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            overflow-x: hidden;
+            box-sizing: border-box;
+            width: 100%;
+        }
+        #tasksModal .modal-header h2 {
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            white-space: normal;
+        }
         .tasks-list {
             max-height: 300px;
             overflow-y: auto;
             margin-top: 10px;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
         .task-item {
             padding: 8px;
             border-bottom: 1px solid #e0e0e0;
             display: flex;
             justify-content: space-between;
-            align-items: center;
+            align-items: flex-start;
             flex-wrap: wrap;
             gap: 10px;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
         .task-item:last-child {
             border-bottom: none;
@@ -157,6 +181,27 @@ foreach ($users as $user) {
         .task-item > div {
             flex: 1;
             min-width: 200px;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            white-space: normal;
+        }
+        .task-item > div strong {
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            white-space: normal;
+            display: block;
+            margin-bottom: 5px;
+        }
+        .task-item > div small {
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            white-space: normal;
+            display: block;
+            line-height: 1.4;
+        }
+        .task-item button {
+            flex-shrink: 0;
+            white-space: nowrap;
         }
         
         @media (max-width: 768px) {
@@ -204,6 +249,13 @@ foreach ($users as $user) {
             .task-item button {
                 width: 100%;
             }
+            #tasksModal .modal-content {
+                max-width: 95%;
+                margin: 10px;
+            }
+            #tasksModalBody {
+                padding: 15px !important;
+            }
         }
         
         @media (max-width: 480px) {
@@ -219,6 +271,25 @@ foreach ($users as $user) {
             .btn-small {
                 padding: 5px 8px;
                 font-size: 12px;
+            }
+            #tasksModal .modal-content {
+                max-width: 98%;
+                margin: 5px;
+            }
+            #tasksModalBody {
+                padding: 10px !important;
+            }
+            .task-item {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .task-item > div {
+                min-width: 0;
+                width: 100%;
+            }
+            .task-item button {
+                width: 100%;
+                margin-top: 10px;
             }
         }
         
@@ -398,7 +469,7 @@ foreach ($users as $user) {
                                             ${task.completed == 1 ? 'Выполнена' : 'Активна'} | 
                                             Создана: ${task.created_at}</small>
                                         </div>
-                                        <button class="btn btn-danger btn-small" onclick="deleteUserTask(${task.id}, ${userId}, '${escapeHtml(task.name)}')">Удалить</button>
+                                        <button class="btn btn-danger btn-small" onclick="deleteUserTask(${task.id}, ${userId}, ${JSON.stringify(task.name)})">Удалить</button>
                                     </div>
                                 `;
                             });
