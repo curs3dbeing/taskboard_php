@@ -414,7 +414,6 @@ if (isset($_GET['message'])) {
             burger.classList.toggle('active');
         }
 
-        // Закрытие меню при клике вне его
         document.addEventListener('click', function(event) {
             const menu = document.getElementById('mobileMenu');
             const burger = document.querySelector('.burger-menu');
@@ -430,4 +429,3 @@ if (isset($_GET['message'])) {
     </script>
 </body>
 </html>
-

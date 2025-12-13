@@ -57,22 +57,40 @@ function openTaskModal(taskId = null, taskName = '', taskDescription = '', prior
     const taskPriorityInput = document.getElementById('taskPriority');
     
     if (taskId) {
-        modalTitle.textContent = 'Редактировать задачу';
+        modalTitle.textContent = 'Редактировать заметку';
         taskIdInput.value = taskId;
         taskNameInput.value = taskName;
         taskDescriptionInput.value = taskDescription;
         taskPriorityInput.value = priority;
+        selectPriority(priority);
     } else {
-        modalTitle.textContent = 'Новая задача';
+        modalTitle.textContent = 'Создать заметку';
         taskIdInput.value = '';
         taskNameInput.value = '';
         taskDescriptionInput.value = '';
         taskPriorityInput.value = '2';
+        selectPriority(2);
         form.reset();
     }
     
     modal.classList.add('show');
-    taskNameInput.focus();
+    if (taskNameInput) taskNameInput.focus();
+}
+
+function selectPriority(priority) {
+    if (typeof priority === 'string') priority = parseInt(priority);
+    
+    // Remove selected class from all options
+    document.querySelectorAll('.priority-option').forEach(opt => opt.classList.remove('selected'));
+    
+    // Add selected class to matching priority options
+    document.querySelectorAll('.priority-option[data-priority="' + priority + '"]').forEach(opt => opt.classList.add('selected'));
+    
+    // Update hidden input
+    const taskPriorityInput = document.getElementById('taskPriority');
+    if (taskPriorityInput) {
+        taskPriorityInput.value = priority;
+    }
 }
 
 function closeTaskModal() {
