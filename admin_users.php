@@ -59,6 +59,11 @@ $userGroups = $stmt->fetchAll();
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            overflow-x: hidden;
+        }
+        
+        body {
+            overflow-x: hidden;
         }
         .admin-nav {
             display: flex;
@@ -363,7 +368,8 @@ $userGroups = $stmt->fetchAll();
         
         @media (max-width: 768px) {
             .main-content {
-                padding: 12px;
+                padding: 8px;
+                overflow-x: hidden;
             }
             
             .task-section {
@@ -371,47 +377,51 @@ $userGroups = $stmt->fetchAll();
             }
             
             .task-section h2 {
-                font-size: 20px;
-                margin-bottom: 16px;
+                font-size: 18px;
+                margin-bottom: 12px;
             }
             
             .search-container {
-                padding: 16px;
-                margin-bottom: 16px;
+                padding: 12px;
+                margin-bottom: 12px;
             }
             
             .search-row {
-                flex-direction: column;
-                gap: 12px;
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
             }
             
             .search-group {
-                min-width: 100%;
+                min-width: 0;
             }
             
             .search-group label {
-                font-size: 13px;
-                margin-bottom: 6px;
+                font-size: 11px;
+                margin-bottom: 4px;
             }
             
             .search-group input,
             .search-group select {
-                padding: 8px 12px;
-                font-size: 14px;
+                padding: 6px 8px;
+                font-size: 12px;
             }
             
             .search-actions {
+                grid-column: 1 / -1;
                 width: 100%;
             }
             
             .search-actions .btn {
                 width: 100%;
+                padding: 8px 12px;
+                font-size: 12px;
             }
             
             .search-results {
-                font-size: 12px;
-                margin-top: 12px;
-                padding-top: 12px;
+                font-size: 11px;
+                margin-top: 10px;
+                padding-top: 10px;
             }
             
             .table-wrapper {
@@ -449,9 +459,9 @@ $userGroups = $stmt->fetchAll();
             }
             
             .header {
-                padding: 10px 12px;
+                padding: 8px 10px;
                 flex-wrap: wrap;
-                gap: 10px;
+                gap: 8px;
             }
             
             .header-left {
@@ -470,7 +480,7 @@ $userGroups = $stmt->fetchAll();
                 order: 1;
                 width: 100%;
                 justify-content: space-between;
-                gap: 8px;
+                gap: 6px;
             }
             
             .header-right .btn {
@@ -509,32 +519,50 @@ $userGroups = $stmt->fetchAll();
         
         @media (max-width: 480px) {
             .main-content {
-                padding: 8px;
+                padding: 6px;
+                overflow-x: hidden;
             }
             
             .task-section h2 {
-                font-size: 18px;
-                margin-bottom: 12px;
+                font-size: 16px;
+                margin-bottom: 10px;
             }
             
             .search-container {
-                padding: 12px;
-                margin-bottom: 12px;
+                padding: 10px;
+                margin-bottom: 10px;
+            }
+            
+            .search-row {
+                grid-template-columns: 1fr;
+                gap: 6px;
             }
             
             .search-group label {
-                font-size: 12px;
+                font-size: 10px;
+                margin-bottom: 3px;
             }
             
             .search-group input,
             .search-group select {
-                padding: 8px 10px;
-                font-size: 13px;
+                padding: 6px 8px;
+                font-size: 11px;
+            }
+            
+            .search-actions .btn {
+                padding: 6px 10px;
+                font-size: 11px;
+            }
+            
+            .search-results {
+                font-size: 10px;
+                margin-top: 8px;
+                padding-top: 8px;
             }
             
             .table-wrapper {
-                margin: 0 -8px;
-                padding: 0 8px;
+                margin: 0 -6px;
+                padding: 0 6px;
             }
             
             .users-table {
@@ -574,18 +602,22 @@ $userGroups = $stmt->fetchAll();
             }
             
             .header {
-                padding: 8px 10px;
+                padding: 6px 8px;
             }
             
             .header-right .btn {
-                padding: 5px 8px;
-                font-size: 10px;
+                padding: 4px 6px;
+                font-size: 9px;
             }
             
             .user-avatar {
-                width: 32px;
-                height: 32px;
-                font-size: 14px;
+                width: 28px;
+                height: 28px;
+                font-size: 12px;
+            }
+            
+            .burger-menu {
+                padding: 4px;
             }
             
             #tasksModal .modal-content {
@@ -611,6 +643,25 @@ $userGroups = $stmt->fetchAll();
             .task-item button {
                 width: 100%;
                 margin-top: 8px;
+            }
+            
+            .search-bar input {
+                font-size: 12px;
+                padding: 6px 10px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                overflow-x: hidden;
+            }
+            
+            .main-layout {
+                overflow-x: hidden;
+            }
+            
+            .content-wrapper {
+                overflow-x: hidden;
             }
         }
     </style>

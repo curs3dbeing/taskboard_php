@@ -173,6 +173,18 @@ $userGroups = $stmt->fetchAll();
             font-weight: 700;
             margin-bottom: 24px;
         }
+        
+        body {
+            overflow-x: hidden;
+        }
+        
+        .main-layout {
+            overflow-x: hidden;
+        }
+        
+        .content-wrapper {
+            overflow-x: hidden;
+        }
         .owner-info {
             font-weight: 600;
             color: var(--text-primary);
@@ -200,7 +212,8 @@ $userGroups = $stmt->fetchAll();
         
         @media (max-width: 768px) {
             .main-content {
-                padding: 12px;
+                padding: 8px;
+                overflow-x: hidden;
             }
             
             .task-section {
@@ -208,37 +221,37 @@ $userGroups = $stmt->fetchAll();
             }
             
             .task-section h2 {
-                font-size: 20px;
-                margin-bottom: 16px;
+                font-size: 18px;
+                margin-bottom: 12px;
             }
             
             .groups-grid {
                 grid-template-columns: 1fr;
-                gap: 16px;
+                gap: 12px;
             }
             
             .group-card {
-                padding: 16px;
+                padding: 12px;
             }
             
             .group-card h3 {
-                font-size: 17px;
+                font-size: 16px;
             }
             
             .group-card p {
-                font-size: 13px;
+                font-size: 12px;
             }
             
             .group-meta {
-                font-size: 11px;
-                margin-top: 12px;
-                padding-top: 12px;
+                font-size: 10px;
+                margin-top: 10px;
+                padding-top: 10px;
             }
             
             .group-meta-item {
                 flex-direction: column;
                 align-items: flex-start;
-                gap: 4px;
+                gap: 3px;
             }
             
             .group-meta-item span:last-child {
@@ -247,21 +260,21 @@ $userGroups = $stmt->fetchAll();
             
             .group-actions {
                 flex-direction: column;
-                gap: 8px;
-                margin-top: 12px;
-                padding-top: 12px;
+                gap: 6px;
+                margin-top: 10px;
+                padding-top: 10px;
             }
             
             .group-actions .btn {
                 width: 100%;
-                font-size: 12px;
-                padding: 8px 12px;
+                font-size: 11px;
+                padding: 6px 10px;
             }
             
             .header {
-                padding: 10px 12px;
+                padding: 8px 10px;
                 flex-wrap: wrap;
-                gap: 10px;
+                gap: 8px;
             }
             
             .header-left {
@@ -280,7 +293,7 @@ $userGroups = $stmt->fetchAll();
                 order: 1;
                 width: 100%;
                 justify-content: space-between;
-                gap: 8px;
+                gap: 6px;
             }
             
             .header-right .btn {
@@ -291,72 +304,77 @@ $userGroups = $stmt->fetchAll();
         
         @media (max-width: 480px) {
             .main-content {
-                padding: 8px;
+                padding: 6px;
+                overflow-x: hidden;
             }
             
             .task-section h2 {
-                font-size: 18px;
-                margin-bottom: 12px;
+                font-size: 16px;
+                margin-bottom: 10px;
             }
             
             .groups-grid {
-                gap: 12px;
+                gap: 10px;
             }
             
             .group-card {
-                padding: 14px;
+                padding: 10px;
             }
             
             .group-card h3 {
-                font-size: 16px;
-                margin-bottom: 8px;
+                font-size: 15px;
+                margin-bottom: 6px;
             }
             
             .group-card p {
-                font-size: 12px;
-                margin: 8px 0;
+                font-size: 11px;
+                margin: 6px 0;
             }
             
             .group-meta {
-                font-size: 10px;
-                margin-top: 10px;
-                padding-top: 10px;
-                gap: 6px;
+                font-size: 9px;
+                margin-top: 8px;
+                padding-top: 8px;
+                gap: 4px;
             }
             
             .group-meta-item {
-                gap: 3px;
+                gap: 2px;
             }
             
             .group-actions {
-                gap: 6px;
-                margin-top: 10px;
-                padding-top: 10px;
+                gap: 5px;
+                margin-top: 8px;
+                padding-top: 8px;
             }
             
             .group-actions .btn {
-                font-size: 11px;
-                padding: 6px 10px;
+                font-size: 10px;
+                padding: 5px 8px;
             }
             
             .btn-small {
-                padding: 6px 10px;
-                font-size: 11px;
-            }
-            
-            .header {
-                padding: 8px 10px;
-            }
-            
-            .header-right .btn {
                 padding: 5px 8px;
                 font-size: 10px;
             }
             
+            .header {
+                padding: 6px 8px;
+            }
+            
+            .header-right .btn {
+                padding: 4px 6px;
+                font-size: 9px;
+            }
+            
             .user-avatar {
-                width: 32px;
-                height: 32px;
-                font-size: 14px;
+                width: 28px;
+                height: 28px;
+                font-size: 12px;
+            }
+            
+            .burger-menu {
+                padding: 4px;
             }
         }
         
