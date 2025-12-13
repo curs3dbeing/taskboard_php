@@ -9,6 +9,11 @@ if (!$pdo) {
 
 $user_id = getCurrentUserId();
 
+// Get user email
+$stmt = $pdo->prepare("SELECT email FROM users WHERE id = ?");
+$stmt->execute([$user_id]);
+$userEmail = $stmt->fetchColumn();
+
 $stmt = $pdo->prepare("SELECT * FROM tasks WHERE user_id = ? AND completed = 0 AND group_id IS NULL ORDER BY priority ASC, created_at DESC");
 $stmt->execute([$user_id]);
 $tasks = $stmt->fetchAll();
@@ -165,15 +170,17 @@ if (isset($_GET['message'])) {
             </header>
             
             <!-- User Menu -->
-            <div class="mobile-menu" id="userMenu" style="display: none; position: absolute; top: 60px; right: 20px; background: var(--card-background); border: 1px solid var(--border-color); border-radius: 8px; padding: 8px; min-width: 200px; z-index: 1000;">
+            <div class="mobile-menu" id="userMenu" style="display: none; position: absolute; top: 60px; right: 20px; background: var(--card-background); border: 1px solid var(--border-color); border-radius: 8px; padding: 8px; min-width: 200px; max-width: 300px; width: auto; z-index: 1000;">
                 <div style="padding: 12px; border-bottom: 1px solid var(--border-color);">
                     <div style="font-weight: 600; color: var(--text-primary);"><?php echo htmlspecialchars($_SESSION['username']); ?></div>
-                    <div style="font-size: 12px; color: var(--text-secondary); margin-top: 4px;">user@example.com</div>
+                    <?php if ($userEmail): ?>
+                        <div style="font-size: 12px; color: var(--text-secondary); margin-top: 4px;"><?php echo htmlspecialchars($userEmail); ?></div>
+                    <?php endif; ?>
                 </div>
                 <?php if (isAdmin()): ?>
-                    <a href="admin_users.php" class="btn btn-secondary" style="width: 100%; margin: 4px 0; text-align: left; padding: 10px 12px; font-size: 14px;">Админ-панель</a>
+                    <a href="admin_users.php" class="btn btn-secondary" style="width: 100%; margin: 4px 0; text-align: left; padding: 10px 12px; font-size: 14px; box-sizing: border-box;">Админ-панель</a>
                 <?php endif; ?>
-                <a href="logout.php" class="btn btn-secondary" style="width: 100%; margin: 4px 0; text-align: left; padding: 10px 12px; font-size: 14px;">Выйти</a>
+                <a href="logout.php" class="btn btn-secondary" style="width: 100%; margin: 4px 0; text-align: left; padding: 10px 12px; font-size: 14px; box-sizing: border-box;">Выйти</a>
             </div>
 
             <!-- Main Content Area -->
