@@ -26,13 +26,11 @@ foreach ($users as $user) {
     $userStats[$user['id']] = $stats;
 }
 
-// Get user email
 $user_id = getCurrentUserId();
 $stmt = $pdo->prepare("SELECT email FROM users WHERE id = ?");
 $stmt->execute([$user_id]);
 $userEmail = $stmt->fetchColumn();
 
-// Get user groups for sidebar
 $stmt = $pdo->prepare("SELECT g.* FROM user_groups g WHERE g.owner_id = ? 
                        UNION 
                        SELECT g.* FROM user_groups g 

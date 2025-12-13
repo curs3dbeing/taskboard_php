@@ -294,13 +294,6 @@ if (isset($_GET['message'])) {
                         <span></span>
                     </button>
                 </div>
-                <div class="search-bar" style="max-width: 400px;">
-                    <svg class="search-bar-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor">
-                        <circle cx="7" cy="7" r="4"/>
-                        <path d="M10 10l3 3"/>
-                    </svg>
-                    <input type="text" placeholder="Поиск групп..." id="searchInput" oninput="filterGroups()">
-                </div>
                 <div class="header-right">
                     <div style="position: relative;">
                         <div class="user-avatar" onclick="toggleUserMenu()" title="<?php echo htmlspecialchars($_SESSION['username']); ?>">
@@ -314,23 +307,11 @@ if (isset($_GET['message'])) {
                                     <div style="font-size: 12px; color: var(--text-secondary); margin-top: 4px;"><?php echo htmlspecialchars($userEmail); ?></div>
                                 <?php endif; ?>
                             </div>
-                            <button class="btn btn-primary" onclick="scrollToCreateGroup(); toggleUserMenu();" style="width: 100%; margin: 4px 0; text-align: left; padding: 10px 12px; font-size: 14px; box-sizing: border-box; display: flex; align-items: center; gap: 8px;">
-                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor">
-                                    <path d="M12 4v8M4 4v8M2 2h12v12H2z"/>
-                                </svg>
-                                Создать группу
-                            </button>
                             <a href="dashboard.php" class="btn btn-secondary" style="width: 100%; margin: 4px 0; text-align: left; padding: 10px 12px; font-size: 14px; box-sizing: border-box; display: flex; align-items: center; gap: 8px;">
                                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor">
                                     <path d="M2 4h12M2 8h12M2 12h12"/>
                                 </svg>
                                 Мои задачи
-                            </a>
-                            <a href="dashboard.php" class="btn btn-secondary" style="width: 100%; margin: 4px 0; text-align: left; padding: 10px 12px; font-size: 14px; box-sizing: border-box; display: flex; align-items: center; gap: 8px;">
-                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor">
-                                    <path d="M8 4v8M4 8h8"/>
-                                </svg>
-                                Создать заметку
                             </a>
                             <?php if (isAdmin()): ?>
                                 <a href="admin_users.php" class="btn btn-secondary" style="width: 100%; margin: 4px 0; text-align: left; padding: 10px 12px; font-size: 14px; box-sizing: border-box; display: flex; align-items: center; gap: 8px;">
@@ -507,16 +488,10 @@ if (isset($_GET['message'])) {
         }
         
         function filterGroups() {
-            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            // Function kept for compatibility, but search is removed from header
             const cards = document.querySelectorAll('.group-card');
             cards.forEach(card => {
-                const name = card.querySelector('h3').textContent.toLowerCase();
-                const description = card.querySelector('p')?.textContent.toLowerCase() || '';
-                if (name.includes(searchTerm) || description.includes(searchTerm)) {
-                    card.style.display = '';
-                } else {
-                    card.style.display = 'none';
-                }
+                card.style.display = '';
             });
         }
         
