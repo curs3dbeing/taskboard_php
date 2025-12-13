@@ -29,7 +29,8 @@ if (!$group) {
     exit;
 }
 
-if (!$group['is_owner'] && !$group['is_member']) {
+// Администраторы имеют доступ ко всем группам
+if (!$group['is_owner'] && !$group['is_member'] && !isAdmin()) {
     header('Location: groups.php?message=' . urlencode('У вас нет доступа к этой группе.'));
     exit;
 }
@@ -110,6 +111,9 @@ if (isset($_GET['message'])) {
             <div class="user-info">
                 <a href="dashboard.php" class="btn btn-secondary">Мои задачи</a>
                 <a href="groups.php" class="btn btn-secondary">Группы</a>
+                <?php if (isAdmin()): ?>
+                    <a href="admin_users.php" class="btn btn-secondary">Админ-панель</a>
+                <?php endif; ?>
                 <?php if (!$group['is_owner'] && $group['is_member']): ?>
                     <a href="leave_group.php?group_id=<?php echo $group_id; ?>" class="btn btn-secondary" onclick="return confirm('Вы уверены, что хотите покинуть группу \'<?php echo htmlspecialchars(addslashes($group['name'])); ?>\'?')">Покинуть группу</a>
                 <?php endif; ?>
@@ -119,6 +123,9 @@ if (isset($_GET['message'])) {
             <div class="mobile-menu" id="mobileMenu">
                 <a href="dashboard.php" class="btn btn-secondary">Мои задачи</a>
                 <a href="groups.php" class="btn btn-secondary">Группы</a>
+                <?php if (isAdmin()): ?>
+                    <a href="admin_users.php" class="btn btn-secondary">Админ-панель</a>
+                <?php endif; ?>
                 <?php if (!$group['is_owner'] && $group['is_member']): ?>
                     <a href="leave_group.php?group_id=<?php echo $group_id; ?>" class="btn btn-secondary" onclick="return confirm('Вы уверены, что хотите покинуть группу \'<?php echo htmlspecialchars(addslashes($group['name'])); ?>\'?')">Покинуть группу</a>
                 <?php endif; ?>
