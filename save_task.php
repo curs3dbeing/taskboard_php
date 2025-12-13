@@ -21,18 +21,6 @@ if (empty($name)) {
     exit;
 }
 
-if (strlen($name) > 35) {
-    $redirect = $group_id ? "group_dashboard.php?group_id=$group_id" : 'dashboard.php';
-    header('Location: ' . $redirect . '?message=' . urlencode('Название задачи не должно превышать 35 символов.'));
-    exit;
-}
-
-if (strlen($description) > 100) {
-    $redirect = $group_id ? "group_dashboard.php?group_id=$group_id" : 'dashboard.php';
-    header('Location: ' . $redirect . '?message=' . urlencode('Описание не должно превышать 100 символов.'));
-    exit;
-}
-
 $name = mb_substr($name, 0, 35);
 $description = mb_substr($description, 0, 100);
 
