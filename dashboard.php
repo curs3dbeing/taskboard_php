@@ -148,13 +148,13 @@ if (isset($_GET['message'])) {
                         <span></span>
                         <span></span>
                     </button>
-                    <div class="search-bar">
-                        <svg class="search-bar-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor">
-                            <circle cx="7" cy="7" r="4"/>
-                            <path d="M10 10l3 3"/>
-                        </svg>
-                        <input type="text" placeholder="Поиск по заметкам, тегам..." id="searchInput" oninput="filterTasks()">
-                    </div>
+                </div>
+                <div class="search-bar">
+                    <svg class="search-bar-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor">
+                        <circle cx="7" cy="7" r="4"/>
+                        <path d="M10 10l3 3"/>
+                    </svg>
+                    <input type="text" placeholder="Поиск по заметкам, тегам..." id="searchInput" oninput="filterTasks()">
                 </div>
                 <div class="header-right">
                     <div style="position: relative;">

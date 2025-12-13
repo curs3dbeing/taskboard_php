@@ -1186,46 +1186,50 @@ body:not(.main-layout) .container {
 
     .header {
         padding: 10px 12px;
-        flex-direction: column;
+        flex-direction: row;
         gap: 10px;
-        align-items: stretch;
+        align-items: center;
     }
 
     .header-left {
-        width: 100%;
-        order: 1;
         display: flex;
         align-items: center;
-        gap: 10px;
-    }
-
-    .search-bar {
-        display: none;
-    }
-
-    .header-right {
-        width: 100%;
-        order: 2;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 8px;
-        flex-wrap: nowrap;
-    }
-    
-    .header-right .btn {
-        padding: 6px 10px;
-        font-size: 12px;
-        white-space: nowrap;
+        gap: 0;
         flex-shrink: 0;
     }
     
-    .header-right .btn svg {
-        margin-right: 4px;
+    .header-left .burger-menu {
+        display: flex !important;
+    }
+
+    .search-bar {
+        display: block;
+        flex: 1;
+        min-width: 0;
+        max-width: none;
+        margin: 0 8px;
     }
     
-    .header-right .btn-text {
-        display: inline;
+    .search-bar input {
+        padding: 8px 12px 8px 36px;
+        font-size: 13px;
+    }
+    
+    .search-bar-icon {
+        width: 16px;
+        height: 16px;
+        left: 10px;
+    }
+
+    .header-right {
+        display: flex;
+        align-items: center;
+        gap: 0;
+        flex-shrink: 0;
+    }
+    
+    .header-right .btn {
+        display: none;
     }
 
     .header h1 {
@@ -1338,15 +1342,30 @@ body:not(.main-layout) .container {
     }
     
     .header-left {
-        gap: 8px;
+        gap: 0;
     }
     
     .search-bar {
-        display: none;
+        display: block;
+        flex: 1;
+        min-width: 0;
+        max-width: none;
+        margin: 0 6px;
+    }
+    
+    .search-bar input {
+        padding: 6px 10px 6px 32px;
+        font-size: 12px;
+    }
+    
+    .search-bar-icon {
+        width: 14px;
+        height: 14px;
+        left: 8px;
     }
 
     .header-right {
-        gap: 6px;
+        gap: 0;
     }
     
     .header-right .btn {

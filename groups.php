@@ -293,13 +293,13 @@ if (isset($_GET['message'])) {
                         <span></span>
                         <span></span>
                     </button>
-                    <div class="search-bar" style="max-width: 400px;">
-                        <svg class="search-bar-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor">
-                            <circle cx="7" cy="7" r="4"/>
-                            <path d="M10 10l3 3"/>
-                        </svg>
-                        <input type="text" placeholder="Поиск групп..." id="searchInput" oninput="filterGroups()">
-                    </div>
+                </div>
+                <div class="search-bar" style="max-width: 400px;">
+                    <svg class="search-bar-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor">
+                        <circle cx="7" cy="7" r="4"/>
+                        <path d="M10 10l3 3"/>
+                    </svg>
+                    <input type="text" placeholder="Поиск групп..." id="searchInput" oninput="filterGroups()">
                 </div>
                 <div class="header-right">
                     <div style="position: relative;">
