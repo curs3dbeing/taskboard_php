@@ -405,7 +405,6 @@ if (isset($_GET['message'])) {
                 }
             });
             
-            // Update sidebar active state
             document.querySelectorAll('.sidebar-section:last-child .sidebar-item').forEach(item => item.classList.remove('active'));
             if (priority === 'all') {
                 document.querySelectorAll('.sidebar-section:last-child .sidebar-item')[0].classList.add('active');
