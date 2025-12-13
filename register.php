@@ -35,8 +35,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $stmt = $pdo->prepare("INSERT INTO users (username, email, password_hash) VALUES (?, ?, ?)");
                 $stmt->execute([$username, $email, $password_hash]);
                 
-                $success = 'Регистрация прошла успешно. Теперь вы можете авторизоваться!';
-                $username = $email = '';
+                // Редирект на страницу авторизации после успешной регистрации
+                header('Location: login.php?message=' . urlencode('Регистрация прошла успешно. Теперь вы можете авторизоваться!'));
+                exit;
             }
         } catch (PDOException $e) {
             $error = 'Во время регистрации произошла ошибка. Попробуйте позже';

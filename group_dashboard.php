@@ -373,6 +373,18 @@ if (isset($_GET['message'])) {
                 }
             }
         });
+
+        // Защита от двойной отправки формы задачи
+        const taskForm = document.getElementById('taskForm');
+        if (taskForm) {
+            taskForm.addEventListener('submit', function(e) {
+                const submitButton = this.querySelector('button[type="submit"]');
+                if (submitButton && !submitButton.disabled) {
+                    submitButton.disabled = true;
+                    submitButton.textContent = 'Сохранение...';
+                }
+            });
+        }
     </script>
 </body>
 </html>

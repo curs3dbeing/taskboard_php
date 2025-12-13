@@ -95,6 +95,19 @@ document.addEventListener('keydown', function(event) {
     }
 });
 
+document.addEventListener('DOMContentLoaded', function() {
+    const taskForm = document.getElementById('taskForm');
+    if (taskForm) {
+        taskForm.addEventListener('submit', function(e) {
+            const submitButton = this.querySelector('button[type="submit"]');
+            if (submitButton && !submitButton.disabled) {
+                submitButton.disabled = true;
+                submitButton.textContent = 'Сохранение...';
+            }
+        });
+    }
+});
+
 function editTask(id, name, description, priority) {
     openTaskModal(id, name, description, priority);
 }

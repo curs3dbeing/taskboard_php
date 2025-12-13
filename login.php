@@ -2,6 +2,11 @@
 require_once 'config.php';
 
 $error = '';
+$message = '';
+
+if (isset($_GET['message'])) {
+    $message = htmlspecialchars($_GET['message']);
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = trim($_POST['username'] ?? '');
@@ -59,6 +64,10 @@ if (isLoggedIn()) {
     <div class="container">
         <div class="auth-card">
             <h1>Авторизация</h1>
+            
+            <?php if ($message): ?>
+                <div class="alert alert-success"><?php echo $message; ?></div>
+            <?php endif; ?>
             
             <?php if ($error): ?>
                 <div class="alert alert-error"><?php echo htmlspecialchars($error); ?></div>
