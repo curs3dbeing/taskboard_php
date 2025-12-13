@@ -72,12 +72,19 @@ if (isset($_GET['message'])) {
     <div class="main-layout">
         <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
-            <div class="sidebar-logo">
-                <div class="sidebar-logo-icon">N</div>
-                <div class="sidebar-logo-text">
-                    <h1>NotesHub</h1>
-                    <p>Командные заметки</p>
+            <div class="sidebar-header-mobile">
+                <div class="sidebar-logo">
+                    <div class="sidebar-logo-icon">N</div>
+                    <div class="sidebar-logo-text">
+                        <h1>NotesHub</h1>
+                        <p>Командные заметки</p>
+                    </div>
                 </div>
+                <button class="sidebar-close-btn" onclick="toggleSidebar()" aria-label="Закрыть меню">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 6L6 18M6 6l12 12"/>
+                    </svg>
+                </button>
             </div>
             
             <div class="sidebar-section">
