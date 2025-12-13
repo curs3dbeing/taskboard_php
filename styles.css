@@ -757,12 +757,18 @@ body {
 
 .task-card.task-completed {
     opacity: 0.7;
-    background-color: #f8f9fa;
+    background: var(--card-background);
+    border-color: var(--border-color);
 }
 
 .task-card.task-completed h3 {
     text-decoration: line-through;
     color: var(--text-secondary);
+    opacity: 0.6;
+}
+
+.task-card.task-completed .task-description {
+    opacity: 0.6;
 }
 
 .task-title-section {

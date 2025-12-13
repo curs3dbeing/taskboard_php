@@ -39,45 +39,55 @@ if (isset($_GET['message'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Управление группами</title>
+    <title>Управление группами - NotesHub</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <style>
-        .groups-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
         .groups-section {
             margin-bottom: 40px;
         }
         .groups-section h2 {
             margin-bottom: 20px;
-            color: #333;
+            color: var(--text-primary);
+            font-size: 20px;
+            font-weight: 700;
         }
         .groups-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
             gap: 20px;
             margin-bottom: 20px;
         }
         .group-card {
-            background: white;
-            border-radius: 8px;
+            background: var(--card-background);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
             padding: 20px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            border-left: 4px solid #007bff;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        .group-card:hover {
+            border-color: var(--border-light);
+            box-shadow: var(--shadow-hover);
+            transform: translateY(-2px);
+            background: var(--card-hover);
         }
         .group-card h3 {
             margin: 0 0 10px 0;
-            color: #333;
+            color: var(--text-primary);
+            font-size: 18px;
+            font-weight: 600;
         }
         .group-card p {
-            color: #666;
+            color: var(--text-secondary);
             margin: 10px 0;
             font-size: 14px;
+            flex: 1;
         }
         .group-meta {
             display: flex;
@@ -85,41 +95,50 @@ if (isset($_GET['message'])) {
             align-items: center;
             margin-top: 15px;
             padding-top: 15px;
-            border-top: 1px solid #eee;
+            border-top: 1px solid var(--border-color);
             font-size: 12px;
-            color: #999;
+            color: var(--text-muted);
         }
         .group-actions {
             display: flex;
             gap: 10px;
             margin-top: 15px;
             flex-wrap: wrap;
+            margin-top: auto;
         }
         .btn-small {
-            padding: 6px 12px;
+            padding: 8px 16px;
             font-size: 14px;
         }
         .btn-danger {
-            background-color: #dc3545;
+            background-color: var(--error-color);
             color: white;
             border: none;
-            padding: 6px 12px;
+            padding: 8px 16px;
             border-radius: 6px;
             font-size: 14px;
             cursor: pointer;
             transition: all 0.3s ease;
+            font-weight: 500;
         }
         .btn-danger:hover {
-            background-color: #c82333;
+            background-color: #dc2626;
             transform: translateY(-1px);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 6px rgba(239, 68, 68, 0.3);
         }
         .create-group-form {
-            background: white;
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            margin-bottom: 30px;
+            background: var(--card-background);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: var(--shadow);
+            margin-bottom: 32px;
+        }
+        .create-group-form h2 {
+            color: var(--text-primary);
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 20px;
         }
         .form-row {
             display: flex;
@@ -132,17 +151,28 @@ if (isset($_GET['message'])) {
         .member-list {
             margin-top: 15px;
             padding-top: 15px;
-            border-top: 1px solid #eee;
+            border-top: 1px solid var(--border-color);
+        }
+        .member-list h4 {
+            color: var(--text-primary);
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 12px;
         }
         .member-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 8px 0;
-            border-bottom: 1px solid #f0f0f0;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            font-size: 14px;
         }
         .member-item:last-child {
             border-bottom: none;
+        }
+        .member-item strong {
+            color: var(--text-primary);
         }
         .add-member-form {
             display: flex;
@@ -153,6 +183,9 @@ if (isset($_GET['message'])) {
         .add-member-form input {
             flex: 1;
             min-width: 0;
+            background: var(--background-secondary);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
         }
         @media (max-width: 768px) {
             .group-actions {
@@ -172,44 +205,124 @@ if (isset($_GET['message'])) {
             .add-member-form .btn {
                 width: 100%;
             }
+            .form-row {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <header class="header">
-            <h1>Управление группами</h1>
-            <button class="burger-menu" onclick="toggleMobileMenu()" aria-label="Меню">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-            <div class="user-info">
-                <a href="dashboard.php" class="btn btn-secondary">Мои задачи</a>
-                <?php if (isAdmin()): ?>
-                    <a href="admin_users.php" class="btn btn-secondary">Админ-панель</a>
-                <?php endif; ?>
-                <span>Здравствуйте, <?php echo htmlspecialchars($_SESSION['username']); ?>!</span>
-                <a href="logout.php" class="btn btn-secondary">Выйти</a>
+    <div class="main-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-logo">
+                <div class="sidebar-logo-icon">N</div>
+                <div class="sidebar-logo-text">
+                    <h1>NotesHub</h1>
+                    <p>Командные заметки</p>
+                </div>
             </div>
-            <div class="mobile-menu" id="mobileMenu">
-                <a href="dashboard.php" class="btn btn-secondary">Мои задачи</a>
-                <?php if (isAdmin()): ?>
-                    <a href="admin_users.php" class="btn btn-secondary">Админ-панель</a>
-                <?php endif; ?>
-                <span>Здравствуйте, <?php echo htmlspecialchars($_SESSION['username']); ?>!</span>
-                <a href="logout.php" class="btn btn-secondary">Выйти</a>
+            
+            <div class="sidebar-section">
+                <div class="sidebar-section-header">
+                    <h3>ГРУППЫ</h3>
+                    <button onclick="window.location.href='groups.php'" title="Управление группами">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor">
+                            <path d="M8 4v8M4 8h8"/>
+                        </svg>
+                    </button>
+                </div>
+                <a href="dashboard.php" class="sidebar-item">
+                    <span class="sidebar-item-text">Все заметки</span>
+                    <svg class="sidebar-item-arrow" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor">
+                        <path d="M6 4l4 4-4 4"/>
+                    </svg>
+                </a>
+                <?php 
+                $stmt = $pdo->prepare("SELECT g.* FROM user_groups g WHERE g.owner_id = ? 
+                                       UNION 
+                                       SELECT g.* FROM user_groups g 
+                                       INNER JOIN group_members gm ON g.id = gm.group_id 
+                                       WHERE gm.user_id = ? 
+                                       ORDER BY created_at DESC");
+                $stmt->execute([$user_id, $user_id]);
+                $allGroups = $stmt->fetchAll();
+                foreach ($allGroups as $g): 
+                ?>
+                    <a href="group_dashboard.php?group_id=<?php echo $g['id']; ?>" class="sidebar-item">
+                        <span class="sidebar-item-dot purple"></span>
+                        <span class="sidebar-item-text"><?php echo htmlspecialchars($g['name']); ?></span>
+                        <svg class="sidebar-item-arrow" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor">
+                            <path d="M6 4l4 4-4 4"/>
+                        </svg>
+                    </a>
+                <?php endforeach; ?>
             </div>
-        </header>
+            
+            <div class="sidebar-section">
+                <div class="sidebar-section-header">
+                    <h3>ВАЖНОСТЬ</h3>
+                </div>
+                <div class="sidebar-item active" onclick="window.location.href='dashboard.php'">
+                    <div class="sidebar-item-icon">O</div>
+                    <span class="sidebar-item-text">Все</span>
+                </div>
+            </div>
+        </aside>
+        
+        <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+        
+        <!-- Main Content -->
+        <div class="content-wrapper">
+            <!-- Header -->
+            <header class="header">
+                <div class="header-left">
+                    <button class="burger-menu" onclick="toggleSidebar()" aria-label="Меню" style="display: none;">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                    <div class="search-bar" style="max-width: 400px;">
+                        <svg class="search-bar-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor">
+                            <circle cx="7" cy="7" r="4"/>
+                            <path d="M10 10l3 3"/>
+                        </svg>
+                        <input type="text" placeholder="Поиск групп..." id="searchInput" oninput="filterGroups()">
+                    </div>
+                </div>
+                <div class="header-right">
+                    <button class="btn btn-secondary" onclick="window.location.href='dashboard.php'" style="padding: 8px 16px; font-size: 14px;">
+                        Мои задачи
+                    </button>
+                    <?php if (isAdmin()): ?>
+                        <button class="btn btn-secondary" onclick="window.location.href='admin_users.php'" style="padding: 8px 16px; font-size: 14px;">
+                            Админ-панель
+                        </button>
+                    <?php endif; ?>
+                    <div class="user-avatar" onclick="toggleUserMenu()" title="<?php echo htmlspecialchars($_SESSION['username']); ?>">
+                        <?php echo strtoupper(mb_substr($_SESSION['username'], 0, 1)); ?>
+                    </div>
+                </div>
+            </header>
+            
+            <!-- User Menu -->
+            <div class="mobile-menu" id="userMenu" style="display: none; position: absolute; top: 60px; right: 20px; background: var(--card-background); border: 1px solid var(--border-color); border-radius: 8px; padding: 8px; min-width: 200px; z-index: 1000;">
+                <div style="padding: 12px; border-bottom: 1px solid var(--border-color);">
+                    <div style="font-weight: 600; color: var(--text-primary);"><?php echo htmlspecialchars($_SESSION['username']); ?></div>
+                </div>
+                <a href="logout.php" class="btn btn-secondary" style="width: 100%; margin: 4px 0; text-align: left; padding: 10px 12px; font-size: 14px;">Выйти</a>
+            </div>
 
-        <?php if ($message): ?>
-            <div class="alert alert-success"><?php echo $message; ?></div>
-        <?php endif; ?>
+            <!-- Main Content Area -->
+            <main class="main-content">
 
-        <div class="groups-container">
-            <!-- Форма создания группы -->
-            <div class="create-group-form">
-                <h2>Создать новую группу</h2>
+                <?php if ($message): ?>
+                    <div class="alert alert-success"><?php echo $message; ?></div>
+                <?php endif; ?>
+
+                <!-- Форма создания группы -->
+                <div class="create-group-form">
+                    <h2>Создать новую группу</h2>
                 <form method="POST" action="create_group.php">
                     <div class="form-row">
                         <div class="form-group">
@@ -319,11 +432,48 @@ if (isset($_GET['message'])) {
                         <?php endforeach; ?>
                     </div>
                 <?php endif; ?>
-            </div>
+                </div>
+            </main>
         </div>
     </div>
 
     <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('active');
+        }
+        
+        function toggleUserMenu() {
+            const menu = document.getElementById('userMenu');
+            menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+        }
+        
+        function filterGroups() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const cards = document.querySelectorAll('.group-card');
+            cards.forEach(card => {
+                const name = card.querySelector('h3').textContent.toLowerCase();
+                const description = card.querySelector('p')?.textContent.toLowerCase() || '';
+                if (name.includes(searchTerm) || description.includes(searchTerm)) {
+                    card.style.display = '';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+        
+        document.addEventListener('click', function(event) {
+            const userMenu = document.getElementById('userMenu');
+            const userAvatar = document.querySelector('.user-avatar');
+            if (userMenu && userAvatar && !userMenu.contains(event.target) && !userAvatar.contains(event.target)) {
+                userMenu.style.display = 'none';
+            }
+        });
+        
+        document.getElementById('sidebarOverlay').addEventListener('click', toggleSidebar);
+        
         function openManageMembers(groupId, groupName) {
             const memberList = document.getElementById('members-' + groupId);
             if (memberList.style.display === 'none') {
@@ -407,25 +557,6 @@ if (isset($_GET['message'])) {
             window.location.href = 'leave_group.php?group_id=' + groupId;
         }
 
-        function toggleMobileMenu() {
-            const menu = document.getElementById('mobileMenu');
-            const burger = document.querySelector('.burger-menu');
-            menu.classList.toggle('active');
-            burger.classList.toggle('active');
-        }
-
-        document.addEventListener('click', function(event) {
-            const menu = document.getElementById('mobileMenu');
-            const burger = document.querySelector('.burger-menu');
-            const header = document.querySelector('.header');
-            
-            if (menu && burger && header) {
-                if (!header.contains(event.target) && menu.classList.contains('active')) {
-                    menu.classList.remove('active');
-                    burger.classList.remove('active');
-                }
-            }
-        });
     </script>
 </body>
 </html>
