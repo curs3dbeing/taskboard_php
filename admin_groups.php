@@ -53,8 +53,21 @@ foreach ($groups as $group) {
         .admin-nav {
             display: flex;
             gap: 10px;
-            margin-bottom: 20px;
             flex-wrap: wrap;
+            align-items: center;
+        }
+        .user-info .admin-nav {
+            margin-bottom: 0;
+        }
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .user-info > * {
+            display: flex;
+            align-items: center;
         }
         .groups-grid {
             display: grid;
