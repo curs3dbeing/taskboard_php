@@ -483,6 +483,15 @@ $userGroups = $stmt->fetchAll();
                     </svg>
                 </a>
             </div>
+            
+            <div class="sidebar-footer-mobile">
+                <a href="logout.php" class="sidebar-item sidebar-logout">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" style="flex-shrink: 0;">
+                        <path d="M6 14H3a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1h3M10 12l4-4-4-4M14 8H6"/>
+                    </svg>
+                    <span class="sidebar-item-text">Выйти</span>
+                </a>
+            </div>
         </aside>
         
         <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>

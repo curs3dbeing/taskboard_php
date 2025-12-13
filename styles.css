@@ -105,6 +105,8 @@ body:not(.main-layout) .container {
     overflow-y: auto;
     z-index: 100;
     padding: 24px 0;
+    display: flex;
+    flex-direction: column;
 }
 
 .sidebar-header-mobile {
@@ -261,10 +263,42 @@ body:not(.main-layout) .container {
     font-size: 14px;
 }
 
+.sidebar-footer-mobile {
+    display: none;
+    padding: 16px;
+    border-top: 1px solid var(--border-color);
+    margin-top: auto;
+}
+
+.sidebar-logout {
+    color: #ef4444 !important;
+}
+
+.sidebar-logout:hover {
+    background: rgba(239, 68, 68, 0.1) !important;
+    color: #ef4444 !important;
+}
+
 .sidebar-item-arrow {
     width: 16px;
     height: 16px;
     opacity: 0.5;
+}
+
+.sidebar-footer-mobile {
+    display: none;
+    padding: 16px;
+    border-top: 1px solid var(--border-color);
+    margin-top: auto;
+}
+
+.sidebar-logout {
+    color: #ef4444 !important;
+}
+
+.sidebar-logout:hover {
+    background: rgba(239, 68, 68, 0.1) !important;
+    color: #ef4444 !important;
 }
 
 /* Header */
@@ -1160,6 +1194,18 @@ body:not(.main-layout) .container {
     
     .sidebar-close-btn {
         display: flex;
+    }
+    
+    .sidebar {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .sidebar-footer-mobile {
+        display: block;
+        margin-top: auto;
+        padding: 16px;
+        border-top: 1px solid var(--border-color);
     }
     
     .content-wrapper {
