@@ -303,14 +303,12 @@ if (isset($_GET['message'])) {
                             Админ-панель
                         </button>
                     <?php endif; ?>
-                    <div class="user-avatar" onclick="toggleUserMenu()" title="<?php echo htmlspecialchars($_SESSION['username']); ?>">
-                        <?php echo strtoupper(mb_substr($_SESSION['username'], 0, 1)); ?>
-                    </div>
-                </div>
-            </header>
-            
-            <!-- User Menu -->
-            <div class="mobile-menu" id="userMenu" style="display: none; position: absolute; top: 60px; right: 20px; background: var(--card-background); border: 1px solid var(--border-color); border-radius: 8px; padding: 8px; min-width: 200px; max-width: 300px; width: auto; z-index: 1000;">
+                    <div style="position: relative;">
+                        <div class="user-avatar" onclick="toggleUserMenu()" title="<?php echo htmlspecialchars($_SESSION['username']); ?>">
+                            <?php echo strtoupper(mb_substr($_SESSION['username'], 0, 1)); ?>
+                        </div>
+                        <!-- User Menu -->
+                        <div class="mobile-menu" id="userMenu" style="display: none; position: absolute; top: calc(100% + 8px); right: 0; background: var(--card-background); border: 1px solid var(--border-color); border-radius: 8px; padding: 8px; min-width: 200px; max-width: 300px; width: auto; z-index: 1000; box-shadow: var(--shadow-lg);">
                 <div style="padding: 12px; border-bottom: 1px solid var(--border-color);">
                     <div style="font-weight: 600; color: var(--text-primary);"><?php echo htmlspecialchars($_SESSION['username']); ?></div>
                     <?php if ($userEmail): ?>
@@ -318,7 +316,10 @@ if (isset($_GET['message'])) {
                     <?php endif; ?>
                 </div>
                 <a href="logout.php" class="btn btn-secondary" style="width: 100%; margin: 4px 0; text-align: left; padding: 10px 12px; font-size: 14px; box-sizing: border-box;">Выйти</a>
-            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
 
             <!-- Main Content Area -->
             <main class="main-content">
