@@ -19,8 +19,11 @@ try {
         <html>
         <head>
             <title>Database Connection Error</title>
+            <link rel="preconnect" href="https://fonts.googleapis.com">
+            <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+            <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&display=swap" rel="stylesheet">
             <style>
-                body { font-family: Arial, sans-serif; text-align: center; padding: 50px; }
+                body { font-family: 'Rubik', Arial, sans-serif; text-align: center; padding: 50px; }
                 .error { color: #dc3545; }
             </style>
         </head>

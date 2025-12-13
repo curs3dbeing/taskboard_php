@@ -40,6 +40,9 @@ if (isset($_GET['message'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Управление группами</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <style>
         .groups-container {
@@ -90,6 +93,7 @@ if (isset($_GET['message'])) {
             display: flex;
             gap: 10px;
             margin-top: 15px;
+            flex-wrap: wrap;
         }
         .btn-small {
             padding: 6px 12px;
@@ -144,9 +148,30 @@ if (isset($_GET['message'])) {
             display: flex;
             gap: 10px;
             margin-top: 15px;
+            flex-wrap: wrap;
         }
         .add-member-form input {
             flex: 1;
+            min-width: 0;
+        }
+        @media (max-width: 768px) {
+            .group-actions {
+                flex-direction: column;
+                gap: 8px;
+            }
+            .group-actions .btn {
+                width: 100%;
+                box-sizing: border-box;
+            }
+            .add-member-form {
+                flex-direction: column;
+            }
+            .add-member-form input {
+                width: 100%;
+            }
+            .add-member-form .btn {
+                width: 100%;
+            }
         }
     </style>
 </head>

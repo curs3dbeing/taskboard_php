@@ -14,43 +14,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         try {
             $pdo = getDBConnection();
-            if (!$pdo) {
-                $error = 'Ошибка подключения к базе данных. Попробуйте позже.';
-            } else {
-                $stmt = $pdo->prepare("SELECT id FROM users WHERE email = ?");
-                $stmt->execute([$email]);
-                $user = $stmt->fetch();
+            
+            $stmt = $pdo->prepare("SELECT id FROM users WHERE email = ?");
+            $stmt->execute([$email]);
+            $user = $stmt->fetch();
+            
+            if ($user) {
+                $token = bin2hex(random_bytes(32));
+                $expires = date('Y-m-d H:i:s', time() + 3600);
                 
-                if ($user) {
-                    $token = bin2hex(random_bytes(32));
-                    $expires = date('Y-m-d H:i:s', time() + 3600);
-                    
-                    $stmt = $pdo->prepare("UPDATE users SET password_reset_token = ?, password_reset_expires = ? WHERE email = ?");
-                    $stmt->execute([$token, $expires, $email]);
+                $stmt = $pdo->prepare("UPDATE users SET password_reset_token = ?, password_reset_expires = ? WHERE email = ?");
+                $stmt->execute([$token, $expires, $email]);
 
-
-                    set_time_limit(60);
-                    
-
-                    $emailSent = @sendPasswordResetEmail($email, $token);
-                    
-
-                    $success = 'Если эта почта существует, ссылка для сброса пароля была отправлена на вашу почту.';
-                    
-
-                    if (!$emailSent) {
-                        error_log("Failed to send password reset email to: $email");
-                    }
+                if (sendPasswordResetEmail($email, $token)) {
+                    $success = 'Ссылка для сброса пароля была отправлена на вашу почту.';
                 } else {
-
-                    $success = 'Если эта почта существует, ссылка для сброса пароля была отправлена на вашу почту.';
+                    $error = 'Возникла ошибка при попытке сброса пароля.';
                 }
+            } else {
+                $success = 'Если эта почта существует, ссылка для сброса пароля была отправлена на вашу почту.';
             }
         } catch (PDOException $e) {
-            error_log("Password reset error: " . $e->getMessage());
-            $error = 'Произошла ошибка, попробуйте еще раз.';
-        } catch (Exception $e) {
-            error_log("Password reset error: " . $e->getMessage());
             $error = 'Произошла ошибка, попробуйте еще раз.';
         }
     }
@@ -62,6 +46,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Сброс пароля</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
