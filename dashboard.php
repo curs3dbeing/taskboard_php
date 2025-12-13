@@ -170,12 +170,6 @@ if (isset($_GET['message'])) {
                                 </svg>
                                 Группы
                             </a>
-                            <a href="groups.php" class="btn btn-secondary" style="width: 100%; margin: 4px 0; text-align: left; padding: 10px 12px; font-size: 14px; box-sizing: border-box; display: flex; align-items: center; gap: 8px;">
-                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor">
-                                    <path d="M12 4v8M4 4v8M2 2h12v12H2z"/>
-                                </svg>
-                                Создать группу
-                            </a>
                             <?php if (isAdmin()): ?>
                                 <a href="admin_users.php" class="btn btn-secondary" style="width: 100%; margin: 4px 0; text-align: left; padding: 10px 12px; font-size: 14px; box-sizing: border-box; display: flex; align-items: center; gap: 8px;">
                                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor">
