@@ -169,12 +169,6 @@ if (isset($_GET['message'])) {
                                     <div style="font-size: 12px; color: var(--text-secondary); margin-top: 4px;"><?php echo htmlspecialchars($userEmail); ?></div>
                                 <?php endif; ?>
                             </div>
-                            <button class="btn btn-primary" onclick="openTaskModal(); toggleUserMenu();" style="width: 100%; margin: 4px 0; text-align: left; padding: 10px 12px; font-size: 14px; box-sizing: border-box; display: flex; align-items: center; gap: 8px;">
-                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor">
-                                    <path d="M8 4v8M4 8h8"/>
-                                </svg>
-                                Создать заметку
-                            </button>
                             <a href="groups.php" class="btn btn-secondary" style="width: 100%; margin: 4px 0; text-align: left; padding: 10px 12px; font-size: 14px; box-sizing: border-box; display: flex; align-items: center; gap: 8px;">
                                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor">
                                     <path d="M12 4v8M4 4v8M2 2h12v12H2z"/>
@@ -208,8 +202,14 @@ if (isset($_GET['message'])) {
                 <?php endif; ?>
 
                 <div class="task-section">
-                    <div class="task-header" style="margin-bottom: 24px;">
+                    <div class="task-header" style="margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between; gap: 16px;">
                         <h2 style="color: var(--text-primary); font-size: 24px; font-weight: 700; margin: 0;">Мои задачи</h2>
+                        <button class="btn btn-primary" onclick="openTaskModal()" style="padding: 10px 20px; font-size: 14px; display: flex; align-items: center; gap: 8px;">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor">
+                                <path d="M8 4v8M4 8h8"/>
+                            </svg>
+                            Создать заметку
+                        </button>
                     </div>
 
                     <!-- Tabs -->
