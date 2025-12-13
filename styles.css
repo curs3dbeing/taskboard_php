@@ -57,9 +57,19 @@ body {
 .container {
     max-width: 100%;
     margin: 0;
-    padding: 0;
+    padding: 20px;
     display: flex;
     min-height: 100vh;
+    position: relative;
+}
+
+/* Container for auth pages */
+body:not(.main-layout) .container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 20px;
 }
 
 .main-layout {
@@ -416,11 +426,17 @@ body {
 /* Auth Cards */
 .auth-card {
     max-width: 450px;
-    margin: 50px auto;
+    width: 100%;
+    margin: 0 auto;
     background: var(--card-background);
     padding: 40px;
     border-radius: 12px;
     box-shadow: var(--shadow);
+    border: 1px solid var(--border-color);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 .auth-card h1 {
@@ -1146,12 +1162,21 @@ body {
     }
 
     .auth-card {
-        margin: 30px auto;
+        position: relative;
+        top: auto;
+        left: auto;
+        transform: none;
+        margin: 20px auto;
         padding: 30px 20px;
+        max-width: 100%;
     }
 
     .auth-card h1 {
         font-size: 28px;
+    }
+    
+    body:not(.main-layout) .container {
+        padding: 20px;
     }
 
     .task-section {
@@ -1227,7 +1252,17 @@ body {
 
 @media (max-width: 480px) {
     .auth-card {
+        position: relative;
+        top: auto;
+        left: auto;
+        transform: none;
+        margin: 10px auto;
         padding: 25px 15px;
+        max-width: 100%;
+    }
+    
+    body:not(.main-layout) .container {
+        padding: 10px;
     }
 
     .task-section {
@@ -1236,6 +1271,15 @@ body {
 
     .task-card {
         padding: 15px;
+    }
+    
+    .header {
+        padding: 10px 12px;
+    }
+    
+    .header-right .btn {
+        padding: 6px 10px;
+        font-size: 11px;
     }
 }
 

@@ -175,24 +175,70 @@ $userGroups = $stmt->fetchAll();
         }
         .owner-info {
             font-weight: 600;
-            color: #2c3e50;
+            color: var(--text-primary);
             word-break: break-word;
         }
         
+        @media (max-width: 1024px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+            
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            
+            .content-wrapper {
+                margin-left: 0;
+            }
+            
+            .burger-menu {
+                display: flex !important;
+            }
+        }
+        
         @media (max-width: 768px) {
-            .admin-container {
+            .main-content {
+                padding: 16px;
+            }
+            
+            .task-section {
                 padding: 0;
             }
-            .admin-container .task-section {
-                padding: 15px;
-                margin: 0;
+            
+            .groups-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
             }
-            .admin-nav {
-                flex-direction: column;
-                gap: 8px;
+            
+            .header {
+                padding: 12px 16px;
+                flex-wrap: wrap;
+                gap: 12px;
             }
-            .admin-nav .btn {
+            
+            .header-left {
+                flex: 1;
+                min-width: 0;
+                order: 2;
+            }
+            
+            .search-bar {
+                max-width: 100%;
+                order: 3;
                 width: 100%;
+            }
+            
+            .header-right {
+                order: 1;
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .header-right .btn {
+                padding: 6px 12px;
+                font-size: 12px;
             }
             .groups-grid {
                 grid-template-columns: 1fr;
@@ -470,6 +516,16 @@ $userGroups = $stmt->fetchAll();
             const userAvatar = document.querySelector('.user-avatar');
             if (userMenu && userAvatar && !userMenu.contains(event.target) && !userAvatar.contains(event.target)) {
                 userMenu.style.display = 'none';
+            }
+            
+            // Close sidebar when clicking outside on mobile
+            const sidebar = document.getElementById('sidebar');
+            const sidebarOverlay = document.getElementById('sidebarOverlay');
+            const burger = document.querySelector('.burger-menu');
+            if (window.innerWidth <= 1024 && sidebar && sidebar.classList.contains('open')) {
+                if (!sidebar.contains(event.target) && !burger.contains(event.target) && event.target !== sidebarOverlay) {
+                    toggleSidebar();
+                }
             }
         });
         

@@ -217,8 +217,14 @@ $userGroups = $stmt->fetchAll();
         }
         .action-buttons {
             display: flex;
-            gap: 5px;
-            flex-wrap: wrap;
+            flex-direction: column;
+            gap: 8px;
+            min-width: 140px;
+        }
+        .action-buttons .btn {
+            width: 100%;
+            text-align: center;
+            box-sizing: border-box;
         }
         .btn-small {
             padding: 6px 12px;
@@ -336,52 +342,99 @@ $userGroups = $stmt->fetchAll();
             white-space: nowrap;
         }
         
+        @media (max-width: 1024px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+            
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            
+            .content-wrapper {
+                margin-left: 0;
+            }
+            
+            .burger-menu {
+                display: flex !important;
+            }
+        }
+        
         @media (max-width: 768px) {
-            .admin-container {
+            .main-content {
+                padding: 16px;
+            }
+            
+            .task-section {
                 padding: 0;
             }
-            .admin-container .task-section {
-                padding: 15px;
-                margin: 0;
-            }
-            .admin-nav {
-                flex-direction: column;
-                gap: 8px;
-            }
-            .admin-nav .btn {
-                width: 100%;
-            }
+            
             .search-container {
-                padding: 15px;
+                padding: 16px;
             }
+            
             .search-row {
                 flex-direction: column;
-                gap: 15px;
+                gap: 12px;
             }
+            
             .search-group {
                 min-width: 100%;
             }
+            
             .search-actions {
                 width: 100%;
             }
+            
             .search-actions .btn {
                 width: 100%;
             }
+            
             .users-table {
                 min-width: 600px;
-                font-size: 14px;
-            }
-            .users-table th,
-            .users-table td {
-                padding: 8px;
                 font-size: 12px;
             }
+            
+            .users-table th,
+            .users-table td {
+                padding: 8px 6px;
+                font-size: 11px;
+            }
+            
             .action-buttons {
                 flex-direction: column;
                 width: 100%;
+                min-width: 120px;
             }
+            
             .action-buttons .btn {
                 width: 100%;
+                font-size: 12px;
+                padding: 6px 10px;
+            }
+            
+            .header {
+                padding: 12px 16px;
+                flex-wrap: wrap;
+            }
+            
+            .header-left {
+                flex: 1;
+                min-width: 0;
+            }
+            
+            .search-bar {
+                max-width: 100%;
+            }
+            
+            .header-right {
+                gap: 8px;
+            }
+            
+            .header-right .btn {
+                padding: 6px 12px;
+                font-size: 12px;
             }
             .badge {
                 font-size: 10px;
@@ -409,44 +462,42 @@ $userGroups = $stmt->fetchAll();
         @media (max-width: 480px) {
             .users-table {
                 min-width: 500px;
-                font-size: 12px;
-            }
-            .users-table th,
-            .users-table td {
-                padding: 6px;
                 font-size: 11px;
             }
-            .btn-small {
-                padding: 5px 8px;
-                font-size: 12px;
+            
+            .users-table th,
+            .users-table td {
+                padding: 6px 4px;
+                font-size: 10px;
             }
+            
+            .btn-small {
+                padding: 6px 10px;
+                font-size: 11px;
+            }
+            
             #tasksModal .modal-content {
                 max-width: 98%;
                 margin: 5px;
             }
+            
             #tasksModalBody {
                 padding: 10px !important;
             }
+            
             .task-item {
                 flex-direction: column;
                 align-items: stretch;
             }
+            
             .task-item > div {
                 min-width: 0;
                 width: 100%;
             }
+            
             .task-item button {
                 width: 100%;
                 margin-top: 10px;
-            }
-        }
-        
-        @media (max-width: 768px) {
-            .header .user-info {
-                display: none;
-            }
-            .header .admin-nav {
-                display: none;
             }
         }
     </style>
@@ -716,6 +767,16 @@ $userGroups = $stmt->fetchAll();
             const userAvatar = document.querySelector('.user-avatar');
             if (userMenu && userAvatar && !userMenu.contains(event.target) && !userAvatar.contains(event.target)) {
                 userMenu.style.display = 'none';
+            }
+            
+            // Close sidebar when clicking outside on mobile
+            const sidebar = document.getElementById('sidebar');
+            const sidebarOverlay = document.getElementById('sidebarOverlay');
+            const burger = document.querySelector('.burger-menu');
+            if (window.innerWidth <= 1024 && sidebar && sidebar.classList.contains('open')) {
+                if (!sidebar.contains(event.target) && !burger.contains(event.target) && event.target !== sidebarOverlay) {
+                    toggleSidebar();
+                }
             }
         });
         

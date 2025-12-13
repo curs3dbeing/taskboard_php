@@ -501,6 +501,16 @@ if (isset($_GET['message'])) {
             if (userMenu && userAvatar && !userMenu.contains(event.target) && !userAvatar.contains(event.target)) {
                 userMenu.style.display = 'none';
             }
+            
+            // Close sidebar when clicking outside on mobile
+            const sidebar = document.getElementById('sidebar');
+            const sidebarOverlay = document.getElementById('sidebarOverlay');
+            const burger = document.querySelector('.burger-menu');
+            if (window.innerWidth <= 1024 && sidebar && sidebar.classList.contains('open')) {
+                if (!sidebar.contains(event.target) && !burger.contains(event.target) && event.target !== sidebarOverlay) {
+                    toggleSidebar();
+                }
+            }
         });
         
         document.getElementById('sidebarOverlay').addEventListener('click', toggleSidebar);
