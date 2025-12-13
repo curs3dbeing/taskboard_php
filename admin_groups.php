@@ -12,7 +12,6 @@ if (isset($_GET['message'])) {
     $message = htmlspecialchars($_GET['message']);
 }
 
-// Получаем список всех групп с информацией о владельце и количестве участников
 $stmt = $pdo->prepare("SELECT g.*, 
                        u.username as owner_username, 
                        u.email as owner_email,
@@ -25,7 +24,6 @@ $stmt = $pdo->prepare("SELECT g.*,
 $stmt->execute();
 $groups = $stmt->fetchAll();
 
-// Получаем статистику задач для каждой группы
 $groupStats = [];
 foreach ($groups as $group) {
     $stmt = $pdo->prepare("SELECT COUNT(*) as total, SUM(CASE WHEN completed = 1 THEN 1 ELSE 0 END) as completed FROM tasks WHERE group_id = ?");
@@ -46,9 +44,11 @@ foreach ($groups as $group) {
     <link rel="stylesheet" href="styles.css">
     <style>
         .admin-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 20px;
+            width: 100%;
+            max-width: 100%;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
         .admin-nav {
             display: flex;
@@ -58,7 +58,7 @@ foreach ($groups as $group) {
         }
         .groups-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 20px;
         }
         .group-card {
@@ -67,15 +67,21 @@ foreach ($groups as $group) {
             padding: 20px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
             border-left: 4px solid #4a90e2;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
         .group-card h3 {
             margin: 0 0 10px 0;
             color: #2c3e50;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
         .group-card p {
             color: #6c757d;
             margin: 10px 0;
             font-size: 14px;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
         .group-meta {
             display: flex;
@@ -90,12 +96,22 @@ foreach ($groups as $group) {
         .group-meta-item {
             display: flex;
             justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+        .group-meta-item span:last-child {
+            text-align: right;
+            word-break: break-word;
         }
         .group-actions {
             display: flex;
             gap: 10px;
             margin-top: 15px;
             flex-wrap: wrap;
+        }
+        .group-actions .btn {
+            flex: 1;
+            min-width: 120px;
         }
         .btn-small {
             padding: 6px 12px;
@@ -111,6 +127,75 @@ foreach ($groups as $group) {
         .owner-info {
             font-weight: 600;
             color: #2c3e50;
+            word-break: break-word;
+        }
+        
+        @media (max-width: 768px) {
+            .admin-container {
+                padding: 0;
+            }
+            .admin-container .task-section {
+                padding: 15px;
+                margin: 0;
+            }
+            .admin-nav {
+                flex-direction: column;
+                gap: 8px;
+            }
+            .admin-nav .btn {
+                width: 100%;
+            }
+            .groups-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            .group-card {
+                padding: 15px;
+            }
+            .group-meta-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .group-meta-item span:last-child {
+                text-align: left;
+            }
+            .group-actions {
+                flex-direction: column;
+            }
+            .group-actions .btn {
+                width: 100%;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .groups-grid {
+                gap: 10px;
+            }
+            .group-card {
+                padding: 12px;
+            }
+            .group-card h3 {
+                font-size: 16px;
+            }
+            .group-card p {
+                font-size: 12px;
+            }
+            .group-meta {
+                font-size: 11px;
+            }
+            .btn-small {
+                padding: 5px 8px;
+                font-size: 12px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header .user-info {
+                display: none;
+            }
+            .header .admin-nav {
+                display: none;
+            }
         }
     </style>
 </head>
@@ -239,7 +324,6 @@ foreach ($groups as $group) {
             burger.classList.toggle('active');
         }
 
-        // Закрытие меню при клике вне его
         document.addEventListener('click', function(event) {
             const menu = document.getElementById('mobileMenu');
             const burger = document.querySelector('.burger-menu');

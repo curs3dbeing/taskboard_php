@@ -28,7 +28,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $user = $stmt->fetch();
             
             if ($user && password_verify($password, $user['password_hash'])) {
-                // Проверяем, не заблокирован ли пользователь
                 if ($user['is_blocked'] == 1) {
                     $error = 'Ваш аккаунт заблокирован администратором. Обратитесь к администратору для разблокировки.';
                 } else {

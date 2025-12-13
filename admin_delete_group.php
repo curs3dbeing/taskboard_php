@@ -18,7 +18,6 @@ if (!$group_id) {
 }
 
 try {
-    // Проверяем, что группа существует
     $stmt = $pdo->prepare("SELECT id, name FROM user_groups WHERE id = ?");
     $stmt->execute([$group_id]);
     $group = $stmt->fetch();
@@ -28,7 +27,6 @@ try {
         exit;
     }
     
-    // Удаляем группу (каскадное удаление удалит всех участников и задачи)
     $stmt = $pdo->prepare("DELETE FROM user_groups WHERE id = ?");
     $stmt->execute([$group_id]);
     

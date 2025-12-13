@@ -18,13 +18,13 @@ if (!$user_id) {
     exit;
 }
 
-// Нельзя блокировать самого себя
+
 if ($user_id == getCurrentUserId()) {
     echo json_encode(['success' => false, 'message' => 'Вы не можете заблокировать самого себя.']);
     exit;
 }
 
-// Проверяем, что пользователь существует и не является администратором
+
 $stmt = $pdo->prepare("SELECT id, role FROM users WHERE id = ?");
 $stmt->execute([$user_id]);
 $user = $stmt->fetch();
@@ -34,7 +34,6 @@ if (!$user) {
     exit;
 }
 
-// Нельзя блокировать других администраторов
 if ($user['role'] === 'admin') {
     echo json_encode(['success' => false, 'message' => 'Нельзя блокировать администратора.']);
     exit;

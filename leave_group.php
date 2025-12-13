@@ -17,7 +17,7 @@ if (!$group_id) {
 }
 
 try {
-    // Проверяем, является ли пользователь участником группы и не является ли владельцем
+
     $stmt = $pdo->prepare("SELECT g.owner_id, g.name FROM user_groups g WHERE g.id = ?");
     $stmt->execute([$group_id]);
     $group = $stmt->fetch();
@@ -27,13 +27,11 @@ try {
         exit;
     }
     
-    // Проверяем, что пользователь не является владельцем
     if ($group['owner_id'] == $user_id) {
         header('Location: groups.php?message=' . urlencode('Владелец группы не может покинуть группу. Используйте функцию удаления группы.'));
         exit;
     }
     
-    // Проверяем, является ли пользователь участником группы
     $stmt = $pdo->prepare("SELECT id FROM group_members WHERE group_id = ? AND user_id = ?");
     $stmt->execute([$group_id, $user_id]);
     if (!$stmt->fetch()) {
@@ -41,7 +39,6 @@ try {
         exit;
     }
     
-    // Удаляем пользователя из участников группы
     $stmt = $pdo->prepare("DELETE FROM group_members WHERE group_id = ? AND user_id = ?");
     $stmt->execute([$group_id, $user_id]);
     

@@ -38,9 +38,11 @@ foreach ($users as $user) {
     <link rel="stylesheet" href="styles.css">
     <style>
         .admin-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 20px;
+            width: 100%;
+            max-width: 100%;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
         .admin-nav {
             display: flex;
@@ -48,8 +50,14 @@ foreach ($users as $user) {
             margin-bottom: 20px;
             flex-wrap: wrap;
         }
+        .table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
         .users-table {
             width: 100%;
+            min-width: 800px;
             border-collapse: collapse;
             background: white;
             border-radius: 8px;
@@ -61,6 +69,7 @@ foreach ($users as $user) {
             padding: 12px;
             text-align: left;
             border-bottom: 1px solid #e0e0e0;
+            white-space: nowrap;
         }
         .users-table th {
             background-color: #f5f7fa;
@@ -70,6 +79,9 @@ foreach ($users as $user) {
         .users-table tr:hover {
             background-color: #f8f9fa;
         }
+        .users-table td:last-child {
+            white-space: normal;
+        }
         .badge {
             display: inline-block;
             padding: 4px 12px;
@@ -77,6 +89,7 @@ foreach ($users as $user) {
             font-size: 12px;
             font-weight: 600;
             text-transform: uppercase;
+            white-space: nowrap;
         }
         .badge-admin {
             background-color: #dc3545;
@@ -102,6 +115,7 @@ foreach ($users as $user) {
         .btn-small {
             padding: 6px 12px;
             font-size: 14px;
+            white-space: nowrap;
         }
         .btn-warning {
             background-color: #ffc107;
@@ -134,9 +148,87 @@ foreach ($users as $user) {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
         }
         .task-item:last-child {
             border-bottom: none;
+        }
+        .task-item > div {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        @media (max-width: 768px) {
+            .admin-container {
+                padding: 0;
+            }
+            .admin-container .task-section {
+                padding: 15px;
+                margin: 0;
+            }
+            .admin-nav {
+                flex-direction: column;
+                gap: 8px;
+            }
+            .admin-nav .btn {
+                width: 100%;
+            }
+            .users-table {
+                min-width: 600px;
+                font-size: 14px;
+            }
+            .users-table th,
+            .users-table td {
+                padding: 8px;
+                font-size: 12px;
+            }
+            .action-buttons {
+                flex-direction: column;
+                width: 100%;
+            }
+            .action-buttons .btn {
+                width: 100%;
+            }
+            .badge {
+                font-size: 10px;
+                padding: 3px 8px;
+            }
+            .task-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .task-item > div {
+                width: 100%;
+            }
+            .task-item button {
+                width: 100%;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .users-table {
+                min-width: 500px;
+                font-size: 12px;
+            }
+            .users-table th,
+            .users-table td {
+                padding: 6px;
+                font-size: 11px;
+            }
+            .btn-small {
+                padding: 5px 8px;
+                font-size: 12px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header .user-info {
+                display: none;
+            }
+            .header .admin-nav {
+                display: none;
+            }
         }
     </style>
 </head>
@@ -175,7 +267,8 @@ foreach ($users as $user) {
             <div class="task-section">
                 <h2>Список всех пользователей (<?php echo count($users); ?>)</h2>
                 
-                <table class="users-table">
+                <div class="table-wrapper">
+                    <table class="users-table">
                     <thead>
                         <tr>
                             <th>ID</th>
@@ -231,6 +324,7 @@ foreach ($users as $user) {
                         <?php endforeach; ?>
                     </tbody>
                 </table>
+                </div>
             </div>
         </div>
     </div>
@@ -371,7 +465,6 @@ foreach ($users as $user) {
             burger.classList.toggle('active');
         }
 
-        // Закрытие меню при клике вне его
         document.addEventListener('click', function(event) {
             const menu = document.getElementById('mobileMenu');
             const burger = document.querySelector('.burger-menu');
@@ -385,7 +478,6 @@ foreach ($users as $user) {
             }
         });
 
-        // Закрытие модального окна при клике вне его
         document.getElementById('tasksModal').addEventListener('click', function(event) {
             if (event.target === this) {
                 closeTasksModal();

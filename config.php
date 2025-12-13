@@ -80,18 +80,18 @@ function requireLogin() {
     }
 }
 
-// Проверка роли пользователя
+
 function getUserRole() {
     if (!isLoggedIn()) {
         return null;
     }
     
-    // Сначала проверяем сессию для оптимизации
+
     if (isset($_SESSION['role'])) {
         return $_SESSION['role'];
     }
     
-    // Если в сессии нет, получаем из базы данных
+
     $pdo = getDBConnection();
     if (!$pdo) {
         return 'user';
@@ -103,17 +103,17 @@ function getUserRole() {
     $result = $stmt->fetch();
     
     $role = $result ? $result['role'] : 'user';
-    $_SESSION['role'] = $role; // Сохраняем в сессию для следующих запросов
+    $_SESSION['role'] = $role; 
     
     return $role;
 }
 
-// Проверка, является ли пользователь администратором
+
 function isAdmin() {
     return getUserRole() === 'admin';
 }
 
-// Требование прав администратора
+
 function requireAdmin() {
     requireLogin();
     if (!isAdmin()) {
@@ -122,7 +122,7 @@ function requireAdmin() {
     }
 }
 
-// Проверка, заблокирован ли пользователь
+
 function isUserBlocked($user_id) {
     $pdo = getDBConnection();
     if (!$pdo) {
