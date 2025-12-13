@@ -776,13 +776,6 @@ $userGroups = $stmt->fetchAll();
                         <span></span>
                     </button>
                 </div>
-                <div class="search-bar" style="max-width: 400px;">
-                    <svg class="search-bar-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor">
-                        <circle cx="7" cy="7" r="4"/>
-                        <path d="M10 10l3 3"/>
-                    </svg>
-                    <input type="text" placeholder="Поиск пользователей..." id="headerSearch" oninput="filterUsers()">
-                </div>
                 <div class="header-right">
                     <div style="position: relative;">
                         <div class="user-avatar" onclick="toggleUserMenu()" title="<?php echo htmlspecialchars($_SESSION['username']); ?>">
@@ -1006,12 +999,10 @@ $userGroups = $stmt->fetchAll();
         document.getElementById('sidebarOverlay').addEventListener('click', toggleSidebar);
         
         function filterUsers() {
-            const headerSearch = document.getElementById('headerSearch');
             const usernameFilter = (document.getElementById('searchUsername')?.value || '').toLowerCase().trim();
             const emailFilter = (document.getElementById('searchEmail')?.value || '').toLowerCase().trim();
             const roleFilter = document.getElementById('searchRole')?.value || '';
             const statusFilter = document.getElementById('searchStatus')?.value || '';
-            const headerSearchValue = headerSearch ? headerSearch.value.toLowerCase().trim() : '';
             
             const rows = document.querySelectorAll('#usersTableBody tr');
             let visibleCount = 0;
@@ -1022,13 +1013,12 @@ $userGroups = $stmt->fetchAll();
                 const role = row.getAttribute('data-role') || '';
                 const status = row.getAttribute('data-status') || '';
                 
-                const matchesHeaderSearch = !headerSearchValue || username.includes(headerSearchValue) || email.includes(headerSearchValue);
                 const matchesUsername = !usernameFilter || username.includes(usernameFilter);
                 const matchesEmail = !emailFilter || email.includes(emailFilter);
                 const matchesRole = !roleFilter || role === roleFilter;
                 const matchesStatus = !statusFilter || status === statusFilter;
                 
-                if (matchesHeaderSearch && matchesUsername && matchesEmail && matchesRole && matchesStatus) {
+                if (matchesUsername && matchesEmail && matchesRole && matchesStatus) {
                     row.classList.remove('hidden');
                     visibleCount++;
                 } else {

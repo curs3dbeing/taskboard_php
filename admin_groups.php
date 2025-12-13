@@ -498,13 +498,6 @@ $userGroups = $stmt->fetchAll();
                         <span></span>
                     </button>
                 </div>
-                <div class="search-bar" style="max-width: 400px;">
-                    <svg class="search-bar-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor">
-                        <circle cx="7" cy="7" r="4"/>
-                        <path d="M10 10l3 3"/>
-                    </svg>
-                    <input type="text" placeholder="Поиск групп..." id="headerSearch" oninput="filterGroups()">
-                </div>
                 <div class="header-right">
                     <div style="position: relative;">
                         <div class="user-avatar" onclick="toggleUserMenu()" title="<?php echo htmlspecialchars($_SESSION['username']); ?>">
@@ -645,18 +638,10 @@ $userGroups = $stmt->fetchAll();
         }
         
         function filterGroups() {
-            const headerSearch = document.getElementById('headerSearch');
-            const searchValue = headerSearch ? headerSearch.value.toLowerCase().trim() : '';
             const cards = document.querySelectorAll('.group-card');
             
             cards.forEach(card => {
-                const name = card.querySelector('h3').textContent.toLowerCase();
-                const description = card.querySelector('p')?.textContent.toLowerCase() || '';
-                if (!searchValue || name.includes(searchValue) || description.includes(searchValue)) {
-                    card.style.display = '';
-                } else {
-                    card.style.display = 'none';
-                }
+                card.style.display = '';
             });
         }
         
