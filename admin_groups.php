@@ -309,11 +309,11 @@ $userGroups = $stmt->fetchAll();
             }
             
             .header-right .btn-text {
-                display: none;
+                display: inline;
             }
             
             .header-right .btn svg {
-                margin-right: 0;
+                margin-right: 4px;
             }
         }
         

@@ -1143,14 +1143,7 @@ body:not(.main-layout) .container {
     }
 
     .search-bar {
-        max-width: 100%;
-        flex: 1;
-        min-width: 0;
-    }
-    
-    .search-bar input {
-        padding: 8px 12px 8px 36px;
-        font-size: 13px;
+        display: none;
     }
 
     .header-right {
@@ -1292,18 +1285,7 @@ body:not(.main-layout) .container {
     }
     
     .search-bar {
-        min-width: 0;
-    }
-    
-    .search-bar input {
-        padding: 6px 10px 6px 32px;
-        font-size: 12px;
-    }
-    
-    .search-bar-icon {
-        width: 14px;
-        height: 14px;
-        left: 10px;
+        display: none;
     }
 
     .header-right {

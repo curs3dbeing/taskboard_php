@@ -168,16 +168,28 @@ if (isset($_GET['message'])) {
                         </div>
                         <!-- User Menu -->
                         <div class="mobile-menu" id="userMenu" style="display: none; position: absolute; top: calc(100% + 8px); right: 0; background: var(--card-background); border: 1px solid var(--border-color); border-radius: 8px; padding: 8px; min-width: 200px; max-width: 300px; width: auto; z-index: 1000; box-shadow: var(--shadow-lg);">
-                <div style="padding: 12px; border-bottom: 1px solid var(--border-color);">
-                    <div style="font-weight: 600; color: var(--text-primary);"><?php echo htmlspecialchars($_SESSION['username']); ?></div>
-                    <?php if ($userEmail): ?>
-                        <div style="font-size: 12px; color: var(--text-secondary); margin-top: 4px;"><?php echo htmlspecialchars($userEmail); ?></div>
-                    <?php endif; ?>
-                </div>
-                <?php if (isAdmin()): ?>
-                    <a href="admin_users.php" class="btn btn-secondary" style="width: 100%; margin: 4px 0; text-align: left; padding: 10px 12px; font-size: 14px; box-sizing: border-box;">Админ-панель</a>
-                <?php endif; ?>
-                <a href="logout.php" class="btn btn-secondary" style="width: 100%; margin: 4px 0; text-align: left; padding: 10px 12px; font-size: 14px; box-sizing: border-box;">Выйти</a>
+                            <div style="padding: 12px; border-bottom: 1px solid var(--border-color);">
+                                <div style="font-weight: 600; color: var(--text-primary);"><?php echo htmlspecialchars($_SESSION['username']); ?></div>
+                                <?php if ($userEmail): ?>
+                                    <div style="font-size: 12px; color: var(--text-secondary); margin-top: 4px;"><?php echo htmlspecialchars($userEmail); ?></div>
+                                <?php endif; ?>
+                            </div>
+                            <button class="btn btn-primary" onclick="openTaskModal(); toggleUserMenu();" style="width: 100%; margin: 4px 0; text-align: left; padding: 10px 12px; font-size: 14px; box-sizing: border-box; display: flex; align-items: center; gap: 8px;">
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor">
+                                    <path d="M8 4v8M4 8h8"/>
+                                </svg>
+                                Создать заметку
+                            </button>
+                            <a href="groups.php" class="btn btn-secondary" style="width: 100%; margin: 4px 0; text-align: left; padding: 10px 12px; font-size: 14px; box-sizing: border-box; display: flex; align-items: center; gap: 8px;">
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor">
+                                    <path d="M12 4v8M4 4v8M2 2h12v12H2z"/>
+                                </svg>
+                                Создать группу
+                            </a>
+                            <?php if (isAdmin()): ?>
+                                <a href="admin_users.php" class="btn btn-secondary" style="width: 100%; margin: 4px 0; text-align: left; padding: 10px 12px; font-size: 14px; box-sizing: border-box;">Админ-панель</a>
+                            <?php endif; ?>
+                            <a href="logout.php" class="btn btn-secondary" style="width: 100%; margin: 4px 0; text-align: left; padding: 10px 12px; font-size: 14px; box-sizing: border-box;">Выйти</a>
                         </div>
                     </div>
                 </div>
@@ -457,6 +469,16 @@ if (isset($_GET['message'])) {
             const userAvatar = document.querySelector('.user-avatar');
             if (userMenu && userAvatar && !userMenu.contains(event.target) && !userAvatar.contains(event.target)) {
                 userMenu.style.display = 'none';
+            }
+            
+            // Close sidebar when clicking outside on mobile
+            const sidebar = document.getElementById('sidebar');
+            const sidebarOverlay = document.getElementById('sidebarOverlay');
+            const burger = document.querySelector('.burger-menu');
+            if (window.innerWidth <= 1024 && sidebar && sidebar.classList.contains('open')) {
+                if (!sidebar.contains(event.target) && !burger.contains(event.target) && event.target !== sidebarOverlay) {
+                    toggleSidebar();
+                }
             }
         });
         
