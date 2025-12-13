@@ -191,7 +191,7 @@ if (isset($_GET['message'])) {
                                                     </svg>
                                                 </button>
                                             <?php endif; ?>
-                                            <button class="btn-icon" onclick="deleteTask(<?php echo $task['id']; ?>)" title="Удалить">
+                                            <button class="btn-icon" onclick="return deleteTask(<?php echo $task['id']; ?>, event)" title="Удалить">
                                                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor">
                                                     <path d="M3 6h10M6 6v6m4-6v6M5 6l1-3h4l1 3M5 6h6"/>
                                                 </svg>
@@ -233,7 +233,7 @@ if (isset($_GET['message'])) {
                                             </svg>
                                         </button>
                                         <?php if ($task['user_id'] == $user_id || isAdmin()): ?>
-                                            <button class="btn-icon" onclick="deleteTask(<?php echo $task['id']; ?>)" title="Удалить">
+                                            <button class="btn-icon" onclick="return deleteTask(<?php echo $task['id']; ?>, event)" title="Удалить">
                                                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor">
                                                     <path d="M3 6h10M6 6v6m4-6v6M5 6l1-3h4l1 3M5 6h6"/>
                                                 </svg>
@@ -346,12 +346,21 @@ if (isset($_GET['message'])) {
             });
         }
 
-        function deleteTask(taskId) {
+        function deleteTask(taskId, event) {
+            if (event) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            
             if (!confirm('Вы уверены, что хотите удалить эту задачу?')) {
-                return;
+                return false;
             }
 
-            window.location.href = 'delete_task.php?id=' + taskId + '&group_id=<?php echo $group_id; ?>';
+            const groupId = <?php echo $group_id; ?>;
+            const url = 'delete_task.php?id=' + encodeURIComponent(taskId) + (groupId ? '&group_id=' + encodeURIComponent(groupId) : '');
+            
+            window.location.href = url;
+            return false;
         }
 
         window.onclick = function(event) {
