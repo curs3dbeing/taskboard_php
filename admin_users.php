@@ -744,9 +744,6 @@ $userGroups = $stmt->fetchAll();
                     </div>
                 </div>
                 <div class="header-right">
-                    <button class="btn btn-secondary" onclick="window.location.href='groups.php'" style="padding: 8px 16px; font-size: 14px;">
-                        <span class="btn-text">Группы</span>
-                    </button>
                     <div style="position: relative;">
                         <div class="user-avatar" onclick="toggleUserMenu()" title="<?php echo htmlspecialchars($_SESSION['username']); ?>">
                             <?php echo strtoupper(mb_substr($_SESSION['username'], 0, 1)); ?>
@@ -759,6 +756,24 @@ $userGroups = $stmt->fetchAll();
                                     <div style="font-size: 12px; color: var(--text-secondary); margin-top: 4px;"><?php echo htmlspecialchars($userEmail); ?></div>
                                 <?php endif; ?>
                             </div>
+                            <a href="dashboard.php" class="btn btn-secondary" style="width: 100%; margin: 4px 0; text-align: left; padding: 10px 12px; font-size: 14px; box-sizing: border-box; display: flex; align-items: center; gap: 8px;">
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor">
+                                    <path d="M2 4h12M2 8h12M2 12h12"/>
+                                </svg>
+                                Мои задачи
+                            </a>
+                            <a href="groups.php" class="btn btn-secondary" style="width: 100%; margin: 4px 0; text-align: left; padding: 10px 12px; font-size: 14px; box-sizing: border-box; display: flex; align-items: center; gap: 8px;">
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor">
+                                    <path d="M12 4v8M4 4v8M2 2h12v12H2z"/>
+                                </svg>
+                                Группы
+                            </a>
+                            <a href="admin_users.php" class="btn btn-secondary" style="width: 100%; margin: 4px 0; text-align: left; padding: 10px 12px; font-size: 14px; box-sizing: border-box; display: flex; align-items: center; gap: 8px; background: rgba(168, 85, 247, 0.1); border: 1px solid var(--primary-color);">
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor">
+                                    <path d="M8 2v12M2 8h12"/>
+                                </svg>
+                                Админ-панель
+                            </a>
                             <a href="logout.php" class="btn btn-secondary" style="width: 100%; margin: 4px 0; text-align: left; padding: 10px 12px; font-size: 14px; box-sizing: border-box;">Выйти</a>
                         </div>
                     </div>

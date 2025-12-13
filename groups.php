@@ -295,20 +295,6 @@ if (isset($_GET['message'])) {
                     </div>
                 </div>
                 <div class="header-right">
-                    <button class="btn btn-secondary" onclick="window.location.href='dashboard.php'" style="padding: 8px 16px; font-size: 14px;">
-                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" style="display: inline-block; vertical-align: middle; margin-right: 6px;">
-                            <path d="M2 4h12M2 8h12M2 12h12"/>
-                        </svg>
-                        <span class="btn-text">Мои задачи</span>
-                    </button>
-                    <?php if (isAdmin()): ?>
-                        <button class="btn btn-secondary" onclick="window.location.href='admin_users.php'" style="padding: 8px 16px; font-size: 14px;">
-                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" style="display: inline-block; vertical-align: middle; margin-right: 6px;">
-                                <path d="M8 2v12M2 8h12"/>
-                            </svg>
-                            <span class="btn-text">Админ-панель</span>
-                        </button>
-                    <?php endif; ?>
                     <div style="position: relative;">
                         <div class="user-avatar" onclick="toggleUserMenu()" title="<?php echo htmlspecialchars($_SESSION['username']); ?>">
                             <?php echo strtoupper(mb_substr($_SESSION['username'], 0, 1)); ?>
@@ -329,10 +315,24 @@ if (isset($_GET['message'])) {
                             </button>
                             <a href="dashboard.php" class="btn btn-secondary" style="width: 100%; margin: 4px 0; text-align: left; padding: 10px 12px; font-size: 14px; box-sizing: border-box; display: flex; align-items: center; gap: 8px;">
                                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor">
+                                    <path d="M2 4h12M2 8h12M2 12h12"/>
+                                </svg>
+                                Мои задачи
+                            </a>
+                            <a href="dashboard.php" class="btn btn-secondary" style="width: 100%; margin: 4px 0; text-align: left; padding: 10px 12px; font-size: 14px; box-sizing: border-box; display: flex; align-items: center; gap: 8px;">
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor">
                                     <path d="M8 4v8M4 8h8"/>
                                 </svg>
                                 Создать заметку
                             </a>
+                            <?php if (isAdmin()): ?>
+                                <a href="admin_users.php" class="btn btn-secondary" style="width: 100%; margin: 4px 0; text-align: left; padding: 10px 12px; font-size: 14px; box-sizing: border-box; display: flex; align-items: center; gap: 8px;">
+                                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor">
+                                        <path d="M8 2v12M2 8h12"/>
+                                    </svg>
+                                    Админ-панель
+                                </a>
+                            <?php endif; ?>
                             <a href="logout.php" class="btn btn-secondary" style="width: 100%; margin: 4px 0; text-align: left; padding: 10px 12px; font-size: 14px; box-sizing: border-box;">Выйти</a>
                         </div>
                     </div>

@@ -150,18 +150,6 @@ if (isset($_GET['message'])) {
                     </div>
                 </div>
                 <div class="header-right">
-                    <button class="btn btn-secondary" onclick="window.location.href='groups.php'" style="padding: 8px 16px; font-size: 14px;">
-                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" style="display: inline-block; vertical-align: middle; margin-right: 6px;">
-                            <path d="M12 4v8M4 4v8M2 2h12v12H2z"/>
-                        </svg>
-                        <span class="btn-text">Группы</span>
-                    </button>
-                    <button class="btn btn-primary" onclick="openTaskModal()" style="padding: 10px 20px; font-size: 14px;">
-                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" style="display: inline-block; vertical-align: middle; margin-right: 6px;">
-                            <path d="M8 4v8M4 8h8"/>
-                        </svg>
-                        <span class="btn-text">Создать</span>
-                    </button>
                     <div style="position: relative;">
                         <div class="user-avatar" onclick="toggleUserMenu()" title="<?php echo htmlspecialchars($_SESSION['username']); ?>">
                             <?php echo strtoupper(mb_substr($_SESSION['username'], 0, 1)); ?>
@@ -184,10 +172,21 @@ if (isset($_GET['message'])) {
                                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor">
                                     <path d="M12 4v8M4 4v8M2 2h12v12H2z"/>
                                 </svg>
+                                Группы
+                            </a>
+                            <a href="groups.php" class="btn btn-secondary" style="width: 100%; margin: 4px 0; text-align: left; padding: 10px 12px; font-size: 14px; box-sizing: border-box; display: flex; align-items: center; gap: 8px;">
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor">
+                                    <path d="M12 4v8M4 4v8M2 2h12v12H2z"/>
+                                </svg>
                                 Создать группу
                             </a>
                             <?php if (isAdmin()): ?>
-                                <a href="admin_users.php" class="btn btn-secondary" style="width: 100%; margin: 4px 0; text-align: left; padding: 10px 12px; font-size: 14px; box-sizing: border-box;">Админ-панель</a>
+                                <a href="admin_users.php" class="btn btn-secondary" style="width: 100%; margin: 4px 0; text-align: left; padding: 10px 12px; font-size: 14px; box-sizing: border-box; display: flex; align-items: center; gap: 8px;">
+                                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor">
+                                        <path d="M8 2v12M2 8h12"/>
+                                    </svg>
+                                    Админ-панель
+                                </a>
                             <?php endif; ?>
                             <a href="logout.php" class="btn btn-secondary" style="width: 100%; margin: 4px 0; text-align: left; padding: 10px 12px; font-size: 14px; box-sizing: border-box;">Выйти</a>
                         </div>
