@@ -79,14 +79,11 @@ function openTaskModal(taskId = null, taskName = '', taskDescription = '', prior
 
 function selectPriority(priority) {
     if (typeof priority === 'string') priority = parseInt(priority);
-    
-    // Remove selected class from all options
+
     document.querySelectorAll('.priority-option').forEach(opt => opt.classList.remove('selected'));
-    
-    // Add selected class to matching priority options
+
     document.querySelectorAll('.priority-option[data-priority="' + priority + '"]').forEach(opt => opt.classList.add('selected'));
-    
-    // Update hidden input
+
     const taskPriorityInput = document.getElementById('taskPriority');
     if (taskPriorityInput) {
         taskPriorityInput.value = priority;

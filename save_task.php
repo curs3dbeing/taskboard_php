@@ -21,9 +21,6 @@ if (empty($name)) {
     exit;
 }
 
-$name = mb_substr($name, 0, 35);
-$description = mb_substr($description, 0, 100);
-
 try {
 
     if ($group_id) {
@@ -76,7 +73,6 @@ try {
             header('Location: ' . $redirect . '?message=' . urlencode('Задание не найдено или у вас нет прав.'));
         }
     } else {
-        // Проверка на дубликаты: если задача с таким же названием была создана менее 5 секунд назад
         $stmt = $pdo->prepare("SELECT id FROM tasks WHERE user_id = ? AND name = ? AND group_id " . ($group_id ? "= ?" : "IS NULL") . " AND created_at > DATE_SUB(NOW(), INTERVAL 5 SECOND)");
         if ($group_id) {
             $stmt->execute([$user_id, $name, $group_id]);
@@ -85,7 +81,6 @@ try {
         }
         
         if ($stmt->fetch()) {
-            // Дубликат найден, не создаем новую задачу
             $redirect = $group_id ? "group_dashboard.php?group_id=$group_id" : 'dashboard.php';
             header('Location: ' . $redirect . '?message=' . urlencode('Задача уже была создана.'));
         } else {

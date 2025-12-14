@@ -372,7 +372,7 @@ if (isset($_GET['message'])) {
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" onclick="closeTaskModal()">Отмена</button>
-                    <button type="submit" class="btn btn-primary">Создать заметку</button>
+                    <button type="submit" class="btn btn-primary">Сохранить</button>
                 </div>
             </form>
         </div>
