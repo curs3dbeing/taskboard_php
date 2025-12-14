@@ -500,12 +500,22 @@ if (isset($_GET['message'])) {
                 }
             });
             
-            document.querySelectorAll('.sidebar-section:last-child .sidebar-item').forEach(item => item.classList.remove('active'));
-            if (priority === 'all') {
-                document.querySelectorAll('.sidebar-section:last-child .sidebar-item')[0].classList.add('active');
-            } else {
-                const items = document.querySelectorAll('.sidebar-section:last-child .sidebar-item');
-                if (items[priority]) items[priority].classList.add('active');
+            
+            const prioritySection = Array.from(document.querySelectorAll('.sidebar-section')).find(section => {
+                const header = section.querySelector('.sidebar-section-header h3');
+                return header && header.textContent.trim() === 'ВАЖНОСТЬ';
+            });
+            
+            if (prioritySection) {
+                const items = prioritySection.querySelectorAll('.sidebar-item');
+                items.forEach(item => item.classList.remove('active'));
+                
+                if (priority === 'all') {
+                    if (items[0]) items[0].classList.add('active');
+                } else {
+                
+                    if (items[priority]) items[priority].classList.add('active');
+                }
             }
         }
         
