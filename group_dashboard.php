@@ -196,6 +196,13 @@ if (isset($_GET['message'])) {
         <div class="content-wrapper">
             <!-- Header -->
             <header class="header">
+                <div class="header-left">
+                    <button class="burger-menu" onclick="toggleSidebar()" aria-label="Меню" style="display: none;">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                </div>
                 <div class="search-bar">
                     <svg class="search-bar-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor">
                         <circle cx="7" cy="7" r="4"/>
@@ -204,11 +211,6 @@ if (isset($_GET['message'])) {
                     <input type="text" placeholder="Поиск по заметкам, тегам..." id="searchInput" oninput="filterTasks()">
                 </div>
                 <div class="header-right">
-                    <button class="burger-menu" onclick="toggleSidebar()" aria-label="Меню" style="display: none;">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </button>
                     <div style="position: relative;">
                         <div class="user-avatar" onclick="toggleUserMenu()" title="<?php echo htmlspecialchars($_SESSION['username']); ?>">
                             <?php echo strtoupper(mb_substr($_SESSION['username'], 0, 1)); ?>
