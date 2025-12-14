@@ -317,12 +317,6 @@ body:not(.main-layout) .container {
     background: rgba(22, 33, 62, 0.8);
 }
 
-.header-left {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    flex: 1;
-}
 
 .burger-menu,
 .user-avatar {
@@ -332,7 +326,7 @@ body:not(.main-layout) .container {
 }
 
 .search-bar {
-    flex: 1;
+    flex: 0 0 auto;
     max-width: 500px;
     position: relative;
 }
@@ -1237,23 +1231,16 @@ body:not(.main-layout) .container {
         align-items: center;
     }
 
-    .header-left {
-        display: flex;
-        align-items: center;
-        gap: 0;
-        flex-shrink: 0;
-    }
-    
-    .header-left .burger-menu {
-        display: flex !important;
-    }
-
     .search-bar {
         display: flex;
         flex: 1;
         min-width: 0;
         max-width: none;
         margin: 0 0 0 8px;
+    }
+    
+    .header-right .burger-menu {
+        display: flex !important;
     }
     
     .search-bar input {
@@ -1385,10 +1372,6 @@ body:not(.main-layout) .container {
     .header {
         padding: 8px 10px;
         gap: 8px;
-    }
-    
-    .header-left {
-        gap: 0;
     }
     
     .search-bar {
