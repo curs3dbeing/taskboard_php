@@ -505,6 +505,13 @@ $userGroups = $stmt->fetchAll();
                         <span></span>
                     </button>
                 </div>
+                <div class="search-bar">
+                    <svg class="search-bar-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor">
+                        <circle cx="7" cy="7" r="4"/>
+                        <path d="M10 10l3 3"/>
+                    </svg>
+                    <input type="text" placeholder="Поиск по названию группы или имени владельца..." id="searchInput" oninput="filterGroups()">
+                </div>
                 <div class="header-right">
                     <div style="position: relative;">
                         <div class="user-avatar" onclick="toggleUserMenu()" title="<?php echo htmlspecialchars($_SESSION['username']); ?>">
@@ -558,7 +565,7 @@ $userGroups = $stmt->fetchAll();
                 <?php else: ?>
                     <div class="groups-grid">
                         <?php foreach ($groups as $group): ?>
-                            <div class="group-card">
+                            <div class="group-card" data-group-name="<?php echo htmlspecialchars(strtolower($group['name'])); ?>" data-owner-name="<?php echo htmlspecialchars(strtolower($group['owner_username'])); ?>">
                                 <h3><?php echo htmlspecialchars($group['name']); ?></h3>
                                 <?php if ($group['description']): ?>
                                     <p><?php echo htmlspecialchars($group['description']); ?></p>
@@ -642,10 +649,18 @@ $userGroups = $stmt->fetchAll();
         }
         
         function filterGroups() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
             const cards = document.querySelectorAll('.group-card');
             
             cards.forEach(card => {
-                card.style.display = '';
+                const groupName = card.getAttribute('data-group-name') || '';
+                const ownerName = card.getAttribute('data-owner-name') || '';
+                
+                if (groupName.includes(searchTerm) || ownerName.includes(searchTerm)) {
+                    card.style.display = '';
+                } else {
+                    card.style.display = 'none';
+                }
             });
         }
         
