@@ -1249,7 +1249,7 @@ body:not(.main-layout) .container {
     }
 
     .search-bar {
-        display: block;
+        display: flex;
         flex: 1;
         min-width: 0;
         max-width: none;
