@@ -203,7 +203,6 @@ if (isset($_GET['message'])) {
                     </svg>
                     <input type="text" placeholder="Поиск по заметкам, тегам..." id="searchInput" oninput="filterTasks()">
                 </div>
-                <div style="flex: 1;"></div>
                 <div class="header-right">
                     <button class="burger-menu" onclick="toggleSidebar()" aria-label="Меню" style="display: none;">
                         <span></span>
